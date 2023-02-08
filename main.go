@@ -8,7 +8,7 @@ import (
 
 func main() {
 	h := server.Default(
-		server.WithHostPorts("127.0.0.1:10085"),
+		server.WithHostPorts("0.0.0.0:10085"),
 	)
 
 	register(h)
