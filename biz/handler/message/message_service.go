@@ -14,14 +14,14 @@ import (
 // @router /douyin/message/chat/ [GET]
 func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req message.douyin_message_chat_request
+	var req message.DouyinMessageChatRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(message.douyin_message_chat_response)
+	resp := new(message.DouyinMessageChatResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +30,14 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/message/action/ [POST]
 func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req message.douyin_message_action_request
+	var req message.DouyinMessageActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(message.douyin_message_action_response)
+	resp := new(message.DouyinMessageActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }

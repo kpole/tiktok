@@ -3,8 +3,6 @@
 #hz cli 使用proto自动生成命令
 source ~/.bash_profile
 
-hz new -mod offer_tiktok
-
 hz update -idl idl/user.proto
 hz update -idl idl/publish.proto
 hz update -idl idl/feed.proto

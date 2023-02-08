@@ -14,14 +14,14 @@ import (
 // @router /douyin/publish/action/ [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req publish.douyin_publish_action_request
+	var req publish.DouyinPublishActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(publish.douyin_publish_action_response)
+	resp := new(publish.DouyinPublishActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +30,14 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/publish/list/ [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req publish.douyin_publish_list_request
+	var req publish.DouyinPublishListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(publish.douyin_publish_list_response)
+	resp := new(publish.DouyinPublishListResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
