@@ -14,14 +14,14 @@ import (
 // @router /douyin/user/register/  [POST]
 func UserRegister(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req user.douyin_user_register_request
+	var req user.DouyinUserRegisterRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(user.douyin_user_register_response)
+	resp := new(user.DouyinUserRegisterResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +30,14 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/user/login/  [POST]
 func UserLogin(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req user.douyin_user_login_request
+	var req user.DouyinUserLoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(user.douyin_user_login_response)
+	resp := new(user.DouyinUserLoginResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -46,14 +46,14 @@ func UserLogin(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/user/ [GET]
 func User(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req user.douyin_user_request
+	var req user.DouyinUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(user.douyin_user_response)
+	resp := new(user.DouyinUserResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }

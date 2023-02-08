@@ -14,14 +14,14 @@ import (
 // @router /douyin/relation/action/ [POST]
 func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req relation.douyin_relation_action_request
+	var req relation.DouyinRelationActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(relation.douyin_relation_action_response)
+	resp := new(relation.DouyinRelationActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +30,14 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/relation/follow/list/ [GET]
 func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req relation.douyin_relation_follow_list_request
+	var req relation.DouyinRelationFollowListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(relation.douyin_relation_follow_list_response)
+	resp := new(relation.DouyinRelationFollowListResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -46,14 +46,14 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/relation/follower/list/ [GET]
 func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req relation.douyin_relation_follow_list_request
+	var req relation.DouyinRelationFollowListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(relation.douyin_relation_follow_list_response)
+	resp := new(relation.DouyinRelationFollowListResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -62,14 +62,14 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/relation/friend/list/ [GET]
 func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req relation.douyin_relation_friend_list_request
+	var req relation.DouyinRelationFriendListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(relation.douyin_relation_friend_list_response)
+	resp := new(relation.DouyinRelationFriendListResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }

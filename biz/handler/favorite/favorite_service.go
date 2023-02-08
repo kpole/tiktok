@@ -14,14 +14,14 @@ import (
 // @router /douyin/publish/action [POST]
 func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req favorite.douyin_favorite_action_request
+	var req favorite.DouyinFavoriteActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(favorite.douyin_favorite_action_response)
+	resp := new(favorite.DouyinFavoriteActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +30,14 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/publish/list [GET]
 func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req favorite.douyin_favorite_list_request
+	var req favorite.DouyinFavoriteListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(favorite.douyin_favorite_list_response)
+	resp := new(favorite.DouyinFavoriteListResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }

@@ -14,14 +14,14 @@ import (
 // @router /douyin/comment/action/ [POST]
 func CommentAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req comment.douyin_comment_action_request
+	var req comment.DouyinCommentActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(comment.douyin_comment_action_response)
+	resp := new(comment.DouyinCommentActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -30,14 +30,14 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 // @router /douyin/comment/list/ [GET]
 func CommentList(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req comment.douyin_comment_list_request
+	var req comment.DouyinCommentListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(comment.douyin_comment_list_response)
+	resp := new(comment.DouyinCommentListResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }

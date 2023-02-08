@@ -14,14 +14,14 @@ import (
 // @router /douyin/feed/ [GET]
 func Feed(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req feed.ouyin_feed_request
+	var req feed.DouyinFeedRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp := new(feed.ouyin_feed_response)
+	resp := new(feed.DouyinFeedResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
