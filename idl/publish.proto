@@ -6,23 +6,23 @@ import "api.proto";
 
 option go_package = "basic/publish";
 
-message douyin_publish_action_request {
+message DouyinPublishActionRequest {
   required string token = 1; // 用户鉴权token
   required bytes data = 2; // 视频数据
   required string title = 3; // 视频标题
 }
 
-message douyin_publish_action_response {
+message DouyinPublishActionResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
 }
 
-message douyin_publish_list_request {
+message DouyinPublishListRequest {
   required int64 user_id = 1; // 用户id
   required string token = 2; // 用户鉴权token
 }
 
-message douyin_publish_list_response {
+message DouyinPublishListResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated Video video_list = 3; // 用户发布的视频列表
@@ -49,12 +49,12 @@ message User {
 
 
 
-service publish_service {
-  rpc publish_action(douyin_publish_action_request) returns(douyin_publish_action_response) {
+service PublishService {
+  rpc PublishAction(DouyinPublishActionRequest) returns(DouyinPublishActionResponse) {
     option (api.post) = "/douyin/publish/action/";
   }
 
-  rpc publish_list(douyin_publish_list_request) returns(douyin_publish_list_response) {
+  rpc PublishList(DouyinPublishListRequest) returns(DouyinPublishListResponse) {
     option (api.get) = "/douyin/publish/list/";
   }
 

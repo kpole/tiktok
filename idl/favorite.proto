@@ -6,23 +6,23 @@ import 'api.proto';
 
 option go_package = "interact/favorite";
 
-message douyin_favorite_action_request {
+message DouyinFavoriteActionRequest {
   required string token = 1; // 用户鉴权token
   required int64 video_id = 2; // 视频id
   required int32 action_type = 3; // 1-点赞，2-取消点赞
 }
 
-message douyin_favorite_action_response {
+message DouyinFavoriteActionResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
 }
 
-message douyin_favorite_list_request {
+message DouyinFavoriteListRequest {
   required int64 user_id = 1; // 用户id
   required string token = 2; // 用户鉴权token
 }
 
-message douyin_favorite_list_response {
+message DouyinFavoriteListResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated Video video_list = 3; // 用户点赞视频列表
@@ -49,12 +49,12 @@ message User {
 
 
 
-service favorite_service {
-  rpc favorite_action(douyin_favorite_action_request) returns(douyin_favorite_action_response) {
+service FavoriteService {
+  rpc favorite_action(DouyinFavoriteActionRequest) returns(DouyinFavoriteActionResponse) {
       option (api.post) = "/douyin/publish/action";
   }
 
-  rpc favorite_list(douyin_favorite_list_request) returns(douyin_favorite_list_response) {
+  rpc FavoriteList(DouyinFavoriteListRequest) returns(DouyinFavoriteListResponse) {
       option (api.get) = "/douyin/publish/list";
   }
 
