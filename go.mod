@@ -1,6 +1,6 @@
 module offer_tiktok
 
-go 1.19
+go 1.18
 
 require (
 	github.com/cloudwego/hertz v0.5.2
