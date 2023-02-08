@@ -6,23 +6,23 @@ import "api.proto";
 
 option go_package = "social/relation";
 
-message douyin_relation_action_request {
+message DouyinRelationActionRequest {
   required string token = 1; // 用户鉴权token
   required int64 to_user_id = 2; // 对方用户id
   required int32 action_type = 3; // 1-关注，2-取消关注
 }
 
-message douyin_relation_action_response {
+message DouyinRelationActionResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
 }
 
-message douyin_relation_follow_list_request {
+message DouyinRelationFollowListRequest {
   required int64 user_id = 1; // 用户id
   required string token = 2; // 用户鉴权token
 }
 
-message douyin_relation_follow_list_response {
+message DouyinRelationFollowListResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated User user_list = 3; // 用户信息列表
@@ -36,23 +36,23 @@ message User {
   required bool is_follow = 5; // true-已关注，false-未关注
 }
 
-message douyin_relation_follower_list_request {
+message DouyinRelationFollowerListRequest {
   required int64 user_id = 1; // 用户id
   required string token = 2; // 用户鉴权token
 }
 
-message douyin_relation_follower_list_response {
+message DouyinRelationFollowerListResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated User user_list = 3; // 用户列表
 }
 
-message douyin_relation_friend_list_request {
+message DouyinRelationFriendListRequest {
   required int64 user_id = 1; // 用户id
   required string token = 2; // 用户鉴权token
 }
 
-message douyin_relation_friend_list_response {
+message DouyinRelationFriendListResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated FriendUser user_list = 3; // 用户列表
@@ -64,20 +64,20 @@ message FriendUser {
     required int64 msgType = 3; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
 }
 
-service relation_service {
-  rpc relation_action(douyin_relation_action_request) returns(douyin_relation_action_response) {
+service RelationService {
+  rpc RelationAction(DouyinRelationActionRequest) returns(DouyinRelationActionResponse) {
     option (api.post) = "/douyin/relation/action/";
   }
 
-  rpc relation_follow_list(douyin_relation_follow_list_request) returns(douyin_relation_follow_list_response) {
+  rpc RelationFollowList(DouyinRelationFollowListRequest) returns(DouyinRelationFollowListResponse) {
     option (api.get) = "/douyin/relation/follow/list/";
   }
 
-  rpc relation_follower_list(douyin_relation_follow_list_request) returns(douyin_relation_follow_list_response) {
+  rpc RelationFollowerList(DouyinRelationFollowListRequest) returns(DouyinRelationFollowListResponse) {
     option (api.get) = "/douyin/relation/follower/list/";
   }
 
-  rpc relation_friend_list(douyin_relation_friend_list_request) returns(douyin_relation_friend_list_response) {
+  rpc RelationFriendList(DouyinRelationFriendListRequest) returns(DouyinRelationFriendListResponse) {
     option (api.get) = "/douyin/relation/friend/list/";
   }
 
