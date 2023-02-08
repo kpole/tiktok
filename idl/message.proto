@@ -6,12 +6,12 @@ import "api.proto";
 
 option go_package = "social/message";
 
-message douyin_message_chat_request {
+message DouyinMessageChatRequest {
   required string token = 1; // 用户鉴权token
   required int64 to_user_id = 2; // 对方用户id
 }
 
-message douyin_message_chat_response {
+message DouyinMessageChatResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
   repeated Message message_list = 3; // 消息列表
@@ -25,24 +25,24 @@ message Message {
   optional string create_time = 5; // 消息创建时间
 }
 
-message douyin_message_action_request {
+message DouyinMessageActionRequest {
   required string token = 1; // 用户鉴权token
   required int64 to_user_id = 2; // 对方用户id
   required int32 action_type = 3; // 1-发送消息
   required string content = 4; // 消息内容
 }
 
-message douyin_message_action_response {
+message DouyinMessageActionResponse {
   required int32 status_code = 1; // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
 }
 
-service message_service {
-  rpc message_chat(douyin_message_chat_request) returns(douyin_message_chat_response) {
+service MessageService {
+  rpc MessageChat(DouyinMessageChatRequest) returns(DouyinMessageChatResponse) {
       option (api.get) = "/douyin/message/chat/";
   }
 
-  rpc message_action(douyin_message_action_request) returns(douyin_message_action_response) {
+  rpc MessageAction(DouyinMessageActionRequest) returns(DouyinMessageActionResponse) {
       option (api.post) = "/douyin/message/action/";
   }
 }
