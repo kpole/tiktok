@@ -49,13 +49,13 @@ message User {
 
 
 
-service FavoriteService {
+service FavoriteHandler {
   rpc favorite_action(DouyinFavoriteActionRequest) returns(DouyinFavoriteActionResponse) {
-      option (api.post) = "/douyin/publish/action";
+      option (api.post) = "/douyin/favortie/action/";
   }
 
   rpc FavoriteList(DouyinFavoriteListRequest) returns(DouyinFavoriteListResponse) {
-      option (api.get) = "/douyin/publish/list";
+      option (api.get) = "/douyin/favorite/list/";
   }
 
 }

@@ -64,7 +64,7 @@ message FriendUser {
     required int64 msgType = 3; // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
 }
 
-service RelationService {
+service RelationHandler {
   rpc RelationAction(DouyinRelationActionRequest) returns(DouyinRelationActionResponse) {
     option (api.post) = "/douyin/relation/action/";
   }

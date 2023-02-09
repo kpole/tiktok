@@ -37,7 +37,7 @@ message DouyinMessageActionResponse {
   optional string status_msg = 2; // 返回状态描述
 }
 
-service MessageService {
+service MessageHandler {
   rpc MessageChat(DouyinMessageChatRequest) returns(DouyinMessageChatResponse) {
       option (api.get) = "/douyin/message/chat/";
   }

@@ -49,7 +49,7 @@ message User {
 
 
 
-service PublishService {
+service PublishHandler {
   rpc PublishAction(DouyinPublishActionRequest) returns(DouyinPublishActionResponse) {
     option (api.post) = "/douyin/publish/action/";
   }

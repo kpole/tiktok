@@ -37,7 +37,7 @@ message User {
   required bool is_follow = 5; // true-已关注，false-未关注
 }
 
-service FeedService {
+service FeedHandler {
   rpc Feed(DouyinFeedRequest) returns(DouyinFeedResponse) {
     option (api.get) = "/douyin/feed/";
   }
