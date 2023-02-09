@@ -2,6 +2,7 @@ package db
 
 import (
 	"offer_tiktok/pkg/constants"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	gormopentracing "gorm.io/plugin/opentracing"

@@ -5,9 +5,12 @@ package user
 import (
 	"context"
 
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	user "offer_tiktok/biz/model/basic/user"
+	service "offer_tiktok/biz/service/user"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // UserRegister .
@@ -16,14 +19,34 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.DouyinUserRegisterRequest
 	err = c.BindAndValidate(&req)
+	hlog.CtxInfof(ctx, "OK")
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		c.JSON(consts.StatusBadRequest, user.DouyinUserLoginResponse{
+			StatusCode: 1,
+			StatusMsg:  "",
+			Token:      "",
+			UserId:     0,
+		})
 		return
 	}
 
-	resp := new(user.DouyinUserRegisterResponse)
+	token, user_id, err := service.NewUserRegisterService(ctx).UserRegister(&req)
+	if err != nil {
+		c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+			Token:      "",
+			UserId:     0,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
+		StatusCode: 0,
+		StatusMsg:  "",
+		Token:      token,
+		UserId:     user_id,
+	})
 }
 
 // UserLogin .
