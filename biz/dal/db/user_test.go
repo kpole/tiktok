@@ -52,3 +52,13 @@ func TestVerifyUser(t *testing.T) {
 	}
 	fmt.Println(user_id)
 }
+
+func TestVerifyUser2(t *testing.T) {
+	Init()
+	user_id, err := VerifyUser("test", "1234523426")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(user_id)
+}

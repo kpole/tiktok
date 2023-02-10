@@ -6,7 +6,9 @@ import (
 	"context"
 
 	user "offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/biz/pack"
 	service "offer_tiktok/biz/service/user"
+	"offer_tiktok/pkg/errno"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -21,29 +23,27 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 	hlog.CtxInfof(ctx, "OK")
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, user.DouyinUserLoginResponse{
-			StatusCode: 1,
-			StatusMsg:  "",
-			Token:      "",
-			UserId:     0,
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
 		})
 		return
 	}
 
 	token, user_id, err := service.NewUserRegisterService(ctx).UserRegister(&req)
 	if err != nil {
-		c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
-			StatusCode: 1,
-			StatusMsg:  err.Error(),
-			Token:      "",
-			UserId:     0,
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
 		})
 		return
 	}
 
 	c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
-		StatusCode: 0,
-		StatusMsg:  "",
+		StatusCode: errno.SuccessCode,
+		StatusMsg:  errno.SuccessMsg,
 		Token:      token,
 		UserId:     user_id,
 	})
@@ -56,13 +56,30 @@ func UserLogin(ctx context.Context, c *app.RequestContext) {
 	var req user.DouyinUserLoginRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
 		return
 	}
 
-	resp := new(user.DouyinUserLoginResponse)
+	token, user_id, err := service.NewUserLoginService(ctx).UserLogin(&req)
+	if err != nil {
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
+		StatusCode: errno.SuccessCode,
+		StatusMsg:  errno.SuccessMsg,
+		Token:      token,
+		UserId:     user_id,
+	})
 }
 
 // User .

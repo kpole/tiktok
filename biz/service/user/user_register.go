@@ -10,9 +10,6 @@ import (
 	"offer_tiktok/biz/dal/db"
 	user "offer_tiktok/biz/model/basic/user"
 	"offer_tiktok/pkg/errno"
-	// "github.com/cloudwego/kitex-examples/bizdemo/easy_note/pkg/errno"
-	// "github.com/cloudwego/kitex-examples/bizdemo/easy_note/kitex_gen/userdemo"
-	// "github.com/cloudwego/kitex-examples/bizdemo/easy_note/cmd/user/dal/db"
 )
 
 type UserRegisterService struct {
@@ -44,5 +41,5 @@ func (s *UserRegisterService) UserRegister(req *user.DouyinUserRegisterRequest) 
 		UserName: req.Username,
 		Password: passWord,
 	})
-	return token, user_id, err
+	return token, user_id, nil
 }
