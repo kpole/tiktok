@@ -30,11 +30,3 @@ func QueryUser(userName string) (*User, error) {
 	}
 	return &user, nil
 }
-
-func VerifyUser(userName string, password string) (int64, error) {
-	var user User
-	if err := DB.Where("user_name = ? AND password = ?", userName, password).Find(&user).Error; err != nil {
-		return 0, err
-	}
-	return user.ID, nil
-}
