@@ -4,8 +4,8 @@ package user
 
 import (
 	"context"
-
 	user "offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/biz/mw"
 	"offer_tiktok/biz/pack"
 	service "offer_tiktok/biz/service/user"
 	"offer_tiktok/pkg/errno"
@@ -31,7 +31,7 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	token, user_id, err := service.NewUserRegisterService(ctx).UserRegister(&req)
+	_, err = service.NewUserRegisterService(ctx).UserRegister(&req)
 	if err != nil {
 		resp := pack.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
@@ -40,7 +40,10 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
-
+	mw.JwtMiddleware.LoginHandler(ctx, c)
+	token := c.GetString("token")
+	v, _ := c.Get("user_id")
+	user_id := v.(int64)
 	c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
 		StatusCode: errno.SuccessCode,
 		StatusMsg:  errno.SuccessMsg,
@@ -52,28 +55,9 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 // UserLogin .
 // @router /douyin/user/login/  [POST]
 func UserLogin(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req user.DouyinUserLoginRequest
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		resp := pack.BuildBaseResp(err)
-		c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
-			StatusCode: resp.StatusCode,
-			StatusMsg:  resp.StatusMsg,
-		})
-		return
-	}
-
-	token, user_id, err := service.NewUserLoginService(ctx).UserLogin(&req)
-	if err != nil {
-		resp := pack.BuildBaseResp(err)
-		c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
-			StatusCode: resp.StatusCode,
-			StatusMsg:  resp.StatusMsg,
-		})
-		return
-	}
-
+	v, _ := c.Get("user_id")
+	user_id := v.(int64)
+	token := c.GetString("token")
 	c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
 		StatusCode: errno.SuccessCode,
 		StatusMsg:  errno.SuccessMsg,

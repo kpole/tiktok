@@ -22,24 +22,23 @@ func NewUserRegisterService(ctx context.Context) *UserRegisterService {
 }
 
 // CreateUser create user info.
-func (s *UserRegisterService) UserRegister(req *user.DouyinUserRegisterRequest) (string, int64, error) {
+func (s *UserRegisterService) UserRegister(req *user.DouyinUserRegisterRequest) (int64, error) {
 	user, err := db.QueryUser(req.Username)
 	if err != nil {
-		return "", 0, err
+		return 0, err
 	}
 	if *user != (db.User{}) {
-		return "", 0, errno.UserAlreadyExistErr
+		return 0, errno.UserAlreadyExistErr
 	}
 
 	h := md5.New()
 	if _, err = io.WriteString(h, req.Password); err != nil {
-		return "", 0, err
+		return 0, err
 	}
 	passWord := fmt.Sprintf("%x", h.Sum(nil))
-	token := req.Username + req.Password
 	user_id, err := db.CreateUser(&db.User{
 		UserName: req.Username,
 		Password: passWord,
 	})
-	return token, user_id, nil
+	return user_id, nil
 }

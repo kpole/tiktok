@@ -11,7 +11,7 @@ import (
 )
 
 // FavoriteAction .
-// @router /douyin/favortie/action [POST]
+// @router /douyin/favortie/action/ [POST]
 func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req favorite.DouyinFavoriteActionRequest
@@ -27,7 +27,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 }
 
 // FavoriteList .
-// @router /douyin/favorite/list [GET]
+// @router /douyin/favorite/list/ [GET]
 func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req favorite.DouyinFavoriteListRequest
