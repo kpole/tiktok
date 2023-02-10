@@ -4,6 +4,7 @@ package Feed
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"offer_tiktok/biz/mw"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -22,6 +23,7 @@ func _feedMw() []app.HandlerFunc {
 }
 
 func _feed0Mw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.JwtMiddleware.MiddlewareFunc(),
+	}
 }

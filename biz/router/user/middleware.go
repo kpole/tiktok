@@ -24,7 +24,9 @@ func _userMw() []app.HandlerFunc {
 
 func _user0Mw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.JwtMiddleware.MiddlewareFunc(),
+	}
 }
 
 func _loginMw() []app.HandlerFunc {
@@ -37,7 +39,6 @@ func _userloginMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
 		mw.JwtMiddleware.LoginHandler,
 	}
-	return nil
 }
 
 func _registerMw() []app.HandlerFunc {

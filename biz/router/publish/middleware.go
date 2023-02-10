@@ -4,6 +4,7 @@ package Publish
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"offer_tiktok/biz/mw"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -28,7 +29,9 @@ func _actionMw() []app.HandlerFunc {
 
 func _publish_ctionMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.JwtMiddleware.MiddlewareFunc(),
+	}
 }
 
 func _listMw() []app.HandlerFunc {
@@ -37,6 +40,7 @@ func _listMw() []app.HandlerFunc {
 }
 
 func _publishlistMw() []app.HandlerFunc {
-	// your code...
-	return nil
+	return []app.HandlerFunc{
+		mw.JwtMiddleware.MiddlewareFunc(),
+	}
 }
