@@ -30,3 +30,23 @@ func _favoritelistMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _favoriteMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _favortieMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _listMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _actionMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

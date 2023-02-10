@@ -4,6 +4,7 @@ package User
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"offer_tiktok/biz/mw"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -33,6 +34,9 @@ func _loginMw() []app.HandlerFunc {
 
 func _userloginMw() []app.HandlerFunc {
 	// your code...
+	return []app.HandlerFunc{
+		mw.JwtMiddleware.LoginHandler,
+	}
 	return nil
 }
 
