@@ -49,7 +49,11 @@ message User {
   bool is_follow = 5; // true-已关注，false-未关注
 }
 
+<<<<<<< HEAD
 service UserService {
+=======
+service UserHandler {
+>>>>>>> 1124eb4705e99472ecce2c8a149f7e5cf462b62a
   rpc user(DouyinUserRequest) returns(DouyinUserResponse) {
     option (api.get) = "/douyin/user/";
   }
