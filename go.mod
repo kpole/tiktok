@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/cloudwego/hertz v0.5.2
 	github.com/golang/protobuf v1.5.2
+	github.com/hertz-contrib/jwt v1.0.2
 	google.golang.org/protobuf v1.28.1
 	gorm.io/driver/mysql v1.4.6
 	gorm.io/gorm v1.24.5
@@ -52,4 +53,5 @@ require (
 	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
+
 )
