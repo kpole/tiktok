@@ -12,3 +12,18 @@ services:
       - MYSQL_USER=douyin
       - MYSQL_PASSWORD=douyin123
       - MYSQL_RANDOM_ROOT_PASSWORD="yes"
+  
+  minio:
+    image: minio/minio
+    ports:
+      - 18001:9000 # api 端口
+      - 18002:9001 # 控制台端口
+    environment:
+      MINIO_ACCESS_KEY: douyin    #管理后台用户名
+      MINIO_SECRET_KEY: douyin123 #管理后台密码，最小8个字符
+    volumes:
+      - ./pkg/data/:/data               #映射当前目录下的data目录至容器内/data目录
+      - ./pkg/configs/minio/:/root/.minio     #映射配置目录
+    command: server --console-address ':9001' /data  #指定容器中的目录 /data
+    privileged: true
+    restart: always

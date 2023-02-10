@@ -15,4 +15,11 @@ const (
 	// EtcdAddress             = "127.0.0.1:2379"
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
+
+	MinioEndPoint        = "localhost:18001"
+	MinioAccessKeyID     = "douyin"
+	MinioSecretAccessKey = "douyin123"
+	MiniouseSSL          = false
+	MinioVideoBucketName = "videobucket"
+	MinioImgBucketName   = "imagebucket"
 )
