@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"offer_tiktok/pkg/constants"
 )
 
@@ -31,10 +32,26 @@ func QueryUser(userName string) (*User, error) {
 	return &user, nil
 }
 
+func QueryUserID(userID int64) (ok bool, err error) {
+	var user User
+	if err := DB.Where("ID = ?", userID).Find(&user).Error; err != nil {
+		return false, err
+	}
+	if userID == 0 {
+		err := errors.New("userID not found")
+		return false, err
+	}
+	return true, nil
+}
+
 func VerifyUser(userName string, password string) (int64, error) {
 	var user User
 	if err := DB.Where("user_name = ? AND password = ?", userName, password).Find(&user).Error; err != nil {
 		return 0, err
+	}
+	if user.ID == 0 {
+		err := errors.New("username or password not verified")
+		return user.ID, err
 	}
 	return user.ID, nil
 }
