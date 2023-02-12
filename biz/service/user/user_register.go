@@ -22,7 +22,7 @@ func NewUserRegisterService(ctx context.Context) *UserRegisterService {
 }
 
 // CreateUser create user info.
-func (s *UserRegisterService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id int64, err error) {
+func (s *UserRegisterService) UserRegister(req *user.DouyinUserRegisterRequest) (int64, error) {
 	user, err := db.QueryUser(req.Username)
 	if err != nil {
 		return 0, err
@@ -36,7 +36,7 @@ func (s *UserRegisterService) UserRegister(req *user.DouyinUserRegisterRequest) 
 		return 0, err
 	}
 	passWord := fmt.Sprintf("%x", h.Sum(nil))
-	user_id, err = db.CreateUser(&db.User{
+	user_id, err := db.CreateUser(&db.User{
 		UserName: req.Username,
 		Password: passWord,
 	})

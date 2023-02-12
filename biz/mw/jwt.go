@@ -7,7 +7,6 @@ import (
 	"github.com/hertz-contrib/jwt"
 	db "offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/user"
-	"offer_tiktok/pkg/errno"
 	_ "offer_tiktok/pkg/errno"
 	"offer_tiktok/pkg/utils"
 	"strconv"
@@ -39,7 +38,7 @@ func Init() {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(int64); ok {
 				return jwt.MapClaims{
-					identity: v,
+					jwt.IdentityKey: v,
 				}
 			}
 			return jwt.MapClaims{}
@@ -48,6 +47,7 @@ func Init() {
 			hlog.CtxInfof(ctx, "Login success ，token is issued clientIP: "+c.ClientIP())
 			c.Set("token", token)
 		},
+
 		Authorizator: func(data interface{}, ctx context.Context, c *app.RequestContext) bool {
 			if v, ok := data.(float64); ok {
 				v := int64(v)
@@ -68,12 +68,6 @@ func Init() {
 				return false
 			}
 			return false
-		},
-		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
-			c.JSON(code, user.DouyinUserLoginResponse{
-				StatusCode: errno.AuthorizationFailedErrCode,
-				StatusMsg:  message,
-			})
 		},
 	})
 
