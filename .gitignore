@@ -36,3 +36,4 @@ _testmain.go
 dumped_hertz_remote_config.json
 
 offer_tiktok
+/pkg/data/.minio.sys/
