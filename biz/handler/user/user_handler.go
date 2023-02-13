@@ -31,7 +31,7 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	_, err = service.NewUserRegisterService(ctx).UserRegister(&req)
+	_, err = service.NewUserService(ctx, c).UserRegister(&req)
 	if err != nil {
 		resp := pack.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
@@ -73,11 +73,20 @@ func User(ctx context.Context, c *app.RequestContext) {
 	var req user.DouyinUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, user.DouyinUserResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
 		return
 	}
 
-	resp := new(user.DouyinUserResponse)
+	u, err := service.NewUserService(ctx, c).UserInfo(&req)
 
-	c.JSON(consts.StatusOK, resp)
+	resp := pack.BuildBaseResp(err)
+	c.JSON(consts.StatusOK, user.DouyinUserResponse{
+		StatusCode: resp.StatusCode,
+		StatusMsg:  resp.StatusMsg,
+		User:       u,
+	})
 }

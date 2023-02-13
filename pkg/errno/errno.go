@@ -10,11 +10,13 @@ const (
 	ServiceErrCode             = 10001
 	ParamErrCode               = 10002
 	UserAlreadyExistErrCode    = 10003
-	AuthorizationFailedErrCode = 10004
+	UserIsNotExistErrCode      = 10004
+	AuthorizationFailedErrCode = 10005
 )
 
 const (
-	SuccessMsg = "Success"
+	SuccessMsg           = "Success"
+	UserIsNotExistErrMsg = "user is not exist"
 )
 
 type ErrNo struct {
@@ -41,6 +43,7 @@ var (
 	ParamErr               = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
+	UserIsNotExistErr      = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
 )
 
 // ConvertErr convert error to Errno
