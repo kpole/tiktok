@@ -24,6 +24,7 @@ func CreateUser(user *User) (int64, error) {
 	return user.ID, err
 }
 
+// 根据 user_name 查询 User
 func QueryUser(userName string) (*User, error) {
 	var user User
 	if err := DB.Where("user_name = ?", userName).Find(&user).Error; err != nil {
@@ -32,6 +33,7 @@ func QueryUser(userName string) (*User, error) {
 	return &user, nil
 }
 
+// 判断 user_id 是否存在
 func QueryUserID(userID int64) (ok bool, err error) {
 	var user User
 	if err := DB.Where("ID = ?", userID).Find(&user).Error; err != nil {
@@ -42,6 +44,18 @@ func QueryUserID(userID int64) (ok bool, err error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func QueryUserById(user_id int64) (*User, error) {
+	var user User
+	if err := DB.Where("id = ?", user_id).Find(&user).Error; err != nil {
+		return nil, err
+	}
+	if user == (User{}) {
+		err := errors.New("userID not found")
+		return nil, err
+	}
+	return &user, nil
 }
 
 func VerifyUser(userName string, password string) (int64, error) {

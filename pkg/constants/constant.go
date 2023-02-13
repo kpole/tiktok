@@ -2,7 +2,8 @@ package constants
 
 const (
 	// NoteTableName           = "note"
-	UserTableName = "users"
+	UserTableName    = "users"
+	FollowsTableName = "follows"
 	// SecretKey               = "secret key"
 	// IdentityKey             = "id"
 	// Total                   = "total"
