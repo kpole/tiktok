@@ -3,10 +3,9 @@ package minio
 import (
 	"context"
 	"fmt"
+	"github.com/minio/minio-go/v7"
 	"offer_tiktok/pkg/constants"
 	"testing"
-
-	"github.com/minio/minio-go/v7"
 )
 
 func TestBucketExist(t *testing.T) {
@@ -40,4 +39,10 @@ func TestBuckMake(t *testing.T) {
 		}
 		fmt.Printf("Successfully created mybucket %v\n", constants.MinioVideoBucketName)
 	}
+}
+func TestGetObjURL(t *testing.T) {
+	Init()
+	ctx := context.Background()
+	url, _ := GetObjURL(ctx, constants.MinioVideoBucketName, "1000.1676386434.mp4")
+	fmt.Println(url.String())
 }
