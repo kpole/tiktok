@@ -1,12 +1,11 @@
 ## Tiktok
 
 ### 1.Setup Basic Dependence
-```shell
-docker-compose up
-```
+
+[Download ffmpeg package](https://ffmpeg.org/download.html) && **add ffmpeg to system path or user path**
 
 ```shell
-hz new -I ./idl $GOPATH/src -idl ./idl/basic/basic.proto -module tiktok
+docker-compose up
 ```
 
 ```shell
