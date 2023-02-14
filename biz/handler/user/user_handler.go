@@ -5,7 +5,7 @@ package user
 import (
 	"context"
 	user "offer_tiktok/biz/model/basic/user"
-	"offer_tiktok/biz/mw"
+	"offer_tiktok/biz/mw/jwt"
 	"offer_tiktok/biz/pack"
 	service "offer_tiktok/biz/service/user"
 	"offer_tiktok/pkg/errno"
@@ -40,7 +40,7 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
-	mw.JwtMiddleware.LoginHandler(ctx, c)
+	jwt.JwtMiddleware.LoginHandler(ctx, c)
 	token := c.GetString("token")
 	v, _ := c.Get("user_id")
 	user_id := v.(int64)

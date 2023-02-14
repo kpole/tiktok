@@ -3,8 +3,9 @@
 package Feed
 
 import (
+	"context"
 	"github.com/cloudwego/hertz/pkg/app"
-	"offer_tiktok/biz/mw"
+	"offer_tiktok/biz/mw/jwt"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -22,8 +23,21 @@ func _feedMw() []app.HandlerFunc {
 	return nil
 }
 
+func feedMiddlewareFunc() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		token := c.Query("token")
+		if len(token) == 0 {
+			return
+		} else {
+			jwt.JwtMiddleware.MiddlewareFunc()(ctx, c)
+			return
+		}
+
+	}
+}
+
 func _feed0Mw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		feedMiddlewareFunc(),
 	}
 }

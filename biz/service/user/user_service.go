@@ -47,8 +47,7 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*user.User, error) {
 	resp := &user.User{}
 	query_user_id := req.UserId
-
-	user_id, exists := s.c.Get("user_id")
+	current_user_id, exists := s.c.Get("current_user_id")
 	if !exists {
 		return resp, errno.UserIsNotExistErr
 	}
@@ -60,7 +59,7 @@ func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*user.User, error) 
 	}
 	FollowCount, err := db.GetFollowCount(u.ID)
 	FolloweeCount, err := db.GetFolloweeCount(u.ID)
-	IsFollow, err := db.QueryFollowExist(&db.Follows{UserId: int64(user_id.(float64)), FollowerId: query_user_id})
+	IsFollow, err := db.QueryFollowExist(&db.Follows{UserId: query_user_id, FollowerId: current_user_id.(int64)})
 	resp = &user.User{
 		Id:            u.ID,
 		Name:          u.UserName,

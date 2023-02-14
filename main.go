@@ -4,14 +4,15 @@ package main
 
 import (
 	"offer_tiktok/biz/dal"
-	"offer_tiktok/biz/mw"
-
+	"offer_tiktok/biz/mw/jwt"
+	"offer_tiktok/biz/mw/minio"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
 func Init() {
 	dal.Init()
-	mw.Init()
+	jwt.Init()
+	minio.Init()
 }
 
 func main() {

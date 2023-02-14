@@ -1,4 +1,4 @@
-package mw
+package jwt
 
 import (
 	"context"
@@ -7,10 +7,10 @@ import (
 	"github.com/hertz-contrib/jwt"
 	db "offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/biz/pack"
 	"offer_tiktok/pkg/errno"
 	_ "offer_tiktok/pkg/errno"
 	"offer_tiktok/pkg/utils"
-	"strconv"
 	"time"
 )
 
@@ -50,22 +50,10 @@ func Init() {
 		},
 		Authorizator: func(data interface{}, ctx context.Context, c *app.RequestContext) bool {
 			if v, ok := data.(float64); ok {
-				v := int64(v)
-				raw_id := c.Query("user_id")
-				if len(raw_id) == 0 {
-					if ok, _ := db.QueryUserID(v); ok {
-						c.Set("user_id", v)
-						hlog.CtxInfof(ctx, "Token is verified clientIP: "+c.ClientIP())
-						return true
-					}
-					return false
-				}
-				user_id, _ := strconv.ParseInt(raw_id, 10, 64)
-				if v == user_id {
-					hlog.CtxInfof(ctx, "Token is verified clientIP: "+c.ClientIP())
-					return true
-				}
-				return false
+				current_user_id := int64(v)
+				c.Set("current_user_id", current_user_id)
+				hlog.CtxInfof(ctx, "Token is verified clientIP: "+c.ClientIP())
+				return true
 			}
 			return false
 		},
@@ -74,6 +62,10 @@ func Init() {
 				StatusCode: errno.AuthorizationFailedErrCode,
 				StatusMsg:  message,
 			})
+		},
+		HTTPStatusMessageFunc: func(e error, ctx context.Context, c *app.RequestContext) string {
+			resp := pack.BuildBaseResp(e)
+			return resp.StatusMsg
 		},
 	})
 

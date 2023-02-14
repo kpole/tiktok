@@ -4,7 +4,7 @@ package Favorite
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
-	"offer_tiktok/biz/mw"
+	"offer_tiktok/biz/mw/jwt"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -24,13 +24,13 @@ func _publishMw() []app.HandlerFunc {
 
 func _favorite_ctionMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
 
 func _favoritelistMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
 

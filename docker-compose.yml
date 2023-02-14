@@ -27,3 +27,8 @@ services:
     command: server --console-address ':9001' /data  #指定容器中的目录 /data
     privileged: true
     restart: always
+
+  ffmpeg:
+    image: jrottenberg/ffmpeg
+    ports:
+      - 18003:8080
