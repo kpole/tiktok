@@ -4,26 +4,36 @@ package publish
 
 import (
 	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	publish "offer_tiktok/biz/model/basic/publish"
+	"offer_tiktok/biz/pack"
+	service "offer_tiktok/biz/service/publish"
+	"offer_tiktok/pkg/errno"
 )
 
 // PublishAction .
 // @router /douyin/publish/action/ [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
+
 	var req publish.DouyinPublishActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := pack.BuildBaseResp(errno.ParamErr)
+		c.JSON(consts.StatusBadRequest, publish.DouyinPublishActionResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
 		return
 	}
+	err = service.NewPublishService(ctx, c).PublishAction(&req)
 
-	resp := new(publish.DouyinPublishActionResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	resp := pack.BuildBaseResp(err)
+	c.JSON(consts.StatusOK, publish.DouyinPublishActionResponse{
+		StatusMsg:  resp.StatusMsg,
+		StatusCode: resp.StatusCode,
+	})
 }
 
 // PublishList .

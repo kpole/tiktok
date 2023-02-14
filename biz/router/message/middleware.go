@@ -4,7 +4,7 @@ package Message
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
-	"offer_tiktok/biz/mw"
+	"offer_tiktok/biz/mw/jwt"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -29,7 +29,7 @@ func _actionMw() []app.HandlerFunc {
 
 func _message_ctionMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -40,6 +40,6 @@ func _chatMw() []app.HandlerFunc {
 
 func _messagechatMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }

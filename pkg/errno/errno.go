@@ -15,8 +15,9 @@ const (
 )
 
 const (
-	SuccessMsg           = "Success"
-	UserIsNotExistErrMsg = "user is not exist"
+	SuccessMsg               = "Success"
+	UserIsNotExistErrMsg     = "user is not exist"
+	PasswordIsNotVerifiedMsg = "username or password not verified"
 )
 
 type ErrNo struct {
@@ -44,6 +45,7 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	UserIsNotExistErr      = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
+	PasswordIsNotVerified  = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
 )
 
 // ConvertErr convert error to Errno

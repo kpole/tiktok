@@ -31,7 +31,11 @@ func MakeBucket(ctx context.Context, bucketName string) {
 	}
 }
 
-func init() {
+func PutToBucket(ctx context.Context, bucketName string, fileName string) {
+
+}
+
+func Init() {
 	ctx := context.Background()
 	Client, err = minio.New(constants.MinioEndPoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(constants.MinioAccessKeyID, constants.MinioSecretAccessKey, ""),

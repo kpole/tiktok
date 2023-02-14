@@ -1,0 +1,5 @@
+package ffmpeg
+
+func Init() {
+
+}

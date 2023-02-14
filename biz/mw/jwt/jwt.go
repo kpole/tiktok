@@ -1,4 +1,4 @@
-package mw
+package jwt
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"github.com/hertz-contrib/jwt"
 	db "offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/biz/pack"
 	"offer_tiktok/pkg/errno"
 	_ "offer_tiktok/pkg/errno"
 	"offer_tiktok/pkg/utils"
@@ -61,6 +62,10 @@ func Init() {
 				StatusCode: errno.AuthorizationFailedErrCode,
 				StatusMsg:  message,
 			})
+		},
+		HTTPStatusMessageFunc: func(e error, ctx context.Context, c *app.RequestContext) string {
+			resp := pack.BuildBaseResp(e)
+			return resp.StatusMsg
 		},
 	})
 

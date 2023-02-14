@@ -4,7 +4,7 @@ package Relation
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
-	"offer_tiktok/biz/mw"
+	"offer_tiktok/biz/mw/jwt"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -29,7 +29,7 @@ func _actionMw() []app.HandlerFunc {
 
 func _relation_ctionMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -45,7 +45,7 @@ func _listMw() []app.HandlerFunc {
 
 func _relationfollowlistMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -61,7 +61,7 @@ func _list0Mw() []app.HandlerFunc {
 
 func _relationfollowerlistMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
 
@@ -77,6 +77,6 @@ func _list1Mw() []app.HandlerFunc {
 
 func _relationfriendlistMw() []app.HandlerFunc {
 	return []app.HandlerFunc{
-		mw.JwtMiddleware.MiddlewareFunc(),
+		jwt.JwtMiddleware.MiddlewareFunc(),
 	}
 }
