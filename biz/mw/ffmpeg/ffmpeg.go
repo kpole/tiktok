@@ -1,5 +1,6 @@
 package ffmpeg
 
+
 import (
 	"bytes"
 	"fmt"
@@ -14,6 +15,5 @@ func GetSnapshot(videoPath string) (buf *bytes.Buffer, err error) {
 		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
 		WithOutput(buf, os.Stdout).
 		Run()
-
 	return buf, nil
 }

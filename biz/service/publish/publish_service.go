@@ -5,11 +5,13 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/publish"
+
 	"offer_tiktok/biz/mw/ffmpeg"
 	"offer_tiktok/biz/mw/minio"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/utils"
 	"path"
+
 	"time"
 )
 
@@ -28,6 +30,7 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	title := s.c.PostForm("title")
 	user_id := v.(int64)
 	nowTime := time.Now().Unix()
+
 	filename := utils.NewFileName(user_id, nowTime)
 	req.Data.Filename = filename + path.Ext(req.Data.Filename)
 	_, err = minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
@@ -41,5 +44,6 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 		PublishTime: nowTime,
 		Title:       title,
 	})
+
 	return err
 }
