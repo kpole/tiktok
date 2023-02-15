@@ -35,6 +35,7 @@ func MakeBucket(ctx context.Context, bucketName string) {
 	}
 }
 
+
 func PutToBucket(ctx context.Context, bucketName string, file *multipart.FileHeader) (info minio.UploadInfo, err error) {
 	fileObj, _ := file.Open()
 	info, err = Client.PutObject(ctx, bucketName, file.Filename, fileObj, file.Size, minio.PutObjectOptions{})

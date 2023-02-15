@@ -5,11 +5,13 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/publish"
+
 	"offer_tiktok/biz/mw/ffmpeg"
 	"offer_tiktok/biz/mw/minio"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/utils"
 	"path"
+
 	"time"
 )
 
@@ -44,7 +46,3 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	return err
 }
 
-func (s *PublishService) PubilshList(req *publish.DouyinPublishListRequest) (err error) {
-
-	return err
-}
