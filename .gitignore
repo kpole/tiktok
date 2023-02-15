@@ -37,3 +37,5 @@ dumped_hertz_remote_config.json
 
 offer_tiktok
 /pkg/data/.minio.sys/
+/pkg/data/imagebucket/
+/pkg/data/videobucket/

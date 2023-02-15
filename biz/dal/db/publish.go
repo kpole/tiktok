@@ -1,11 +1,15 @@
 package db
 
+
+import "time"
+
+
 type Video struct {
 	ID          int64
 	AuthorID    int64
 	PlayURL     string
 	CoverURL    string
-	PublishTime int64
+	PublishTime time.Time
 	Title       string
 }
 

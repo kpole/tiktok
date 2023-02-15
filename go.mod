@@ -7,6 +7,7 @@ require (
 	github.com/disintegration/imaging v1.6.2
 	github.com/golang/protobuf v1.5.2
 	github.com/hertz-contrib/jwt v1.0.2
+	github.com/hertz-contrib/reverseproxy v1.0.0
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/u2takey/ffmpeg-go v0.4.1
 	google.golang.org/protobuf v1.28.1

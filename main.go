@@ -3,11 +3,23 @@
 package main
 
 import (
+	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/hertz-contrib/reverseproxy"
 	"offer_tiktok/biz/dal"
 	"offer_tiktok/biz/mw/jwt"
 	"offer_tiktok/biz/mw/minio"
-	"github.com/cloudwego/hertz/pkg/app/server"
 )
+
+// 将hertz server中路由符合/src/*name的通配路由进行转发
+func minioReverseProxy(c context.Context, ctx *app.RequestContext) {
+	proxy, _ := reverseproxy.NewSingleHostReverseProxy("http://localhost:18001")
+	ctx.Request.SetRequestURI(ctx.Param("name"))
+	hlog.CtxInfof(c, string(ctx.Request.URI().Path()))
+	proxy.ServeHTTP(c, ctx)
+}
 
 func Init() {
 	dal.Init()
@@ -21,6 +33,8 @@ func main() {
 		server.WithHostPorts("0.0.0.0:18005"),
 	)
 
+	h.GET("/src/*name", minioReverseProxy)
 	register(h)
+
 	h.Spin()
 }
