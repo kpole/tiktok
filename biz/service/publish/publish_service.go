@@ -27,8 +27,8 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	v, _ := s.c.Get("current_user_id")
 	title := s.c.PostForm("title")
 	user_id := v.(int64)
-	nowTime := time.Now().Unix()
-	filename := utils.NewFileName(user_id, nowTime)
+	nowTime := time.Now()
+	filename := utils.NewFileName(user_id, nowTime.Unix())
 	req.Data.Filename = filename + path.Ext(req.Data.Filename)
 	_, err = minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
 	videoURL, err := minio.GetObjURL(s.ctx, constants.MinioVideoBucketName, req.Data.Filename)
@@ -41,5 +41,10 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 		PublishTime: nowTime,
 		Title:       title,
 	})
+	return err
+}
+
+func (s *PublishService) PubilshList(req *publish.DouyinPublishListRequest) (err error) {
+
 	return err
 }
