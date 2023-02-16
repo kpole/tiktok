@@ -43,6 +43,6 @@ func TestBuckMake(t *testing.T) {
 func TestGetObjURL(t *testing.T) {
 	Init()
 	ctx := context.Background()
-	url, _ := GetObjURL(ctx, constants.MinioVideoBucketName, "1000.1676386434.mp4")
+	url, _ := GetObjURL(ctx, constants.MinioVideoBucketName, "1000.1676403991.mp4")
 	fmt.Println(url.String())
 }
