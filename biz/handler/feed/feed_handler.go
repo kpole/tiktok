@@ -5,9 +5,13 @@ package feed
 import (
 	"context"
 
+	feed "offer_tiktok/biz/model/basic/feed"
+	"offer_tiktok/biz/pack"
+	feed_service "offer_tiktok/biz/service/feed"
+	"offer_tiktok/pkg/errno"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	feed "offer_tiktok/biz/model/basic/feed"
 )
 
 // Feed .
@@ -17,11 +21,24 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 	var req feed.DouyinFeedRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := pack.BuildBaseResp(err)
+		// c.String(consts.StatusBadRequest, err.Error())
+		c.JSON(consts.StatusOK, feed.DouyinFeedResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
 		return
 	}
 
-	resp := new(feed.DouyinFeedResponse)
+	resp, err := feed_service.NewFeedService(ctx, c).Feed(&req)
+	if err != nil {
+		bresp := pack.BuildBaseResp(err)
+		resp.StatusCode = bresp.StatusCode
+		resp.StatusMsg = bresp.StatusMsg
+		c.JSON(consts.StatusOK, resp)
+	}
+	resp.StatusCode = errno.SuccessCode
+	resp.StatusMsg = errno.SuccessMsg
 
 	c.JSON(consts.StatusOK, resp)
 }

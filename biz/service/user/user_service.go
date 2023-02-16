@@ -45,27 +45,67 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 }
 
 func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*user.User, error) {
-	resp := &user.User{}
+	// resp := &user.User{}
 	query_user_id := req.UserId
 	current_user_id, exists := s.c.Get("current_user_id")
 	if !exists {
-		return resp, errno.UserIsNotExistErr
+		current_user_id = 0
 	}
 
-	u, err := db.QueryUserById(query_user_id)
+	// u, err := db.QueryUserById(query_user_id)
 
+	// if err != nil {
+	// 	return resp, err
+	// }
+	// FollowCount, err := db.GetFollowCount(u.ID)
+	// FolloweeCount, err := db.GetFolloweeCount(u.ID)
+	// IsFollow, err := db.QueryFollowExist(&db.Follows{UserId: query_user_id, FollowerId: current_user_id.(int64)})
+
+	// resp = &user.User{
+	// 	Id:            u.ID,
+	// 	Name:          u.UserName,
+	// 	FollowCount:   FollowCount,
+	// 	FollowerCount: FolloweeCount,
+	// 	IsFollow:      IsFollow,
+	// }
+	return s.GetUserInfo(query_user_id, current_user_id.(int64))
+}
+
+/**
+ * @description: 根据当前用户 user_id 查询 query_user_id 的信息
+ * @param {int64} query_user_id
+ * @param {int64} userId 当前登陆用户 id，可能为 0
+ * @return {user.User}
+ */
+func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.User, error) {
+	u := &user.User{}
+
+	dbUser, err := db.QueryUserById(query_user_id)
 	if err != nil {
-		return resp, err
+		return u, err
 	}
-	FollowCount, err := db.GetFollowCount(u.ID)
-	FolloweeCount, err := db.GetFolloweeCount(u.ID)
-	IsFollow, err := db.QueryFollowExist(&db.Follows{UserId: query_user_id, FollowerId: current_user_id.(int64)})
-	resp = &user.User{
-		Id:            u.ID,
-		Name:          u.UserName,
+	FollowCount, err := db.GetFollowCount(query_user_id)
+	if err != nil {
+		return u, err
+	}
+	FolloweeCount, err := db.GetFolloweeCount(query_user_id)
+
+	var IsFollow bool
+	if user_id != 0 {
+		IsFollow, err = db.QueryFollowExist(&db.Follows{UserId: user_id, FollowerId: query_user_id})
+		if err != nil {
+			return u, err
+		}
+	} else {
+		IsFollow = false
+	}
+
+	u = &user.User{
+		Id:            query_user_id,
+		Name:          dbUser.UserName,
 		FollowCount:   FollowCount,
 		FollowerCount: FolloweeCount,
 		IsFollow:      IsFollow,
 	}
-	return resp, nil
+	return u, nil
 }
