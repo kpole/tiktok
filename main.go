@@ -16,7 +16,7 @@ import (
 // 将hertz server中路由符合/src/*name的通配路由进行转发
 func minioReverseProxy(c context.Context, ctx *app.RequestContext) {
 	proxy, _ := reverseproxy.NewSingleHostReverseProxy("http://localhost:18001")
-	ctx.Request.SetRequestURI(ctx.Param("name"))
+	ctx.URI().SetPath(ctx.Param("name"))
 	hlog.CtxInfof(c, string(ctx.Request.URI().Path()))
 	proxy.ServeHTTP(c, ctx)
 }

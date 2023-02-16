@@ -1,6 +1,5 @@
 package utils
 
-
 import (
 	"context"
 	"fmt"
@@ -22,6 +21,8 @@ func URLconvert(ctx context.Context, c *app.RequestContext, path string) (fullUR
 		hlog.CtxInfof(ctx, err.Error())
 		return ""
 	}
-	fullURL = string(c.URI().Scheme()) + "://" + string(c.URI().Host()) + "/src" + u.Path
-	return fullURL
+	u.Scheme = string(c.URI().Scheme())
+	u.Host = string(c.URI().Host())
+	u.Path = "/src" + u.Path
+	return u.String()
 }
