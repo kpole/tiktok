@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// user_id 关注了 follower_id
 type Follows struct {
 	ID         int64          `json:"id"`
 	UserId     int64          `json:"user_id"`
@@ -66,4 +67,32 @@ func GetFolloweeCount(follower_id int64) (int64, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// 获得 user_id 关注的人的 id
+func GetFollowIdList(user_id int64) ([]int64, error) {
+	var follow_actions []Follows
+	err := DB.Where("user_id = ?", user_id).Find(&follow_actions).Error
+	if err != nil {
+		return nil, err
+	}
+	var result []int64
+	for _, v := range follow_actions {
+		result = append(result, v.FollowerId)
+	}
+	return result, nil
+}
+
+// 获得 follower_id 所有粉丝的 id
+func GetFollowerIdList(follower_id int64) ([]int64, error) {
+	var follow_actions []Follows
+	err := DB.Where("follower_id = ?", follower_id).Find(&follow_actions).Error
+	if err != nil {
+		return nil, err
+	}
+	var result []int64
+	for _, v := range follow_actions {
+		result = append(result, v.UserId)
+	}
+	return result, nil
 }
