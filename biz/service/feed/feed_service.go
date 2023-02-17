@@ -45,7 +45,7 @@ func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedRespons
 	}
 
 	videos := make([]*feed.Video, 0, constants.VideoFeedCount)
-	err = s.copyVideos(&videos, &dbVideos, current_user_id.(int64))
+	err = s.CopyVideos(&videos, &dbVideos, current_user_id.(int64))
 	if err != nil {
 		return resp, nil
 	}
@@ -56,7 +56,7 @@ func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedRespons
 	return resp, nil
 }
 
-func (s *FeedService) copyVideos(result *[]*feed.Video, data *[]*db.Video, userId int64) error {
+func (s *FeedService) CopyVideos(result *[]*feed.Video, data *[]*db.Video, userId int64) error {
 	for _, item := range *data {
 		video := s.createVideo(item, userId)
 		*result = append(*result, video)
