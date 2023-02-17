@@ -262,11 +262,11 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            *int64  `protobuf:"varint,1,req,name=id" json:"id,required" form:"id,required" query:"id,required"`                                                   // 用户id
-	Name          *string `protobuf:"bytes,2,req,name=name" json:"name,required" form:"name,required" query:"name,required"`                                            // 用户名称
-	FollowCount   *int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount" json:"follow_count,omitempty" form:"follow_count" query:"follow_count"`           // 关注总数
-	FollowerCount *int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount" json:"follower_count,omitempty" form:"follower_count" query:"follower_count"` // 粉丝总数
-	IsFollow      *bool   `protobuf:"varint,5,req,name=is_follow,json=isFollow" json:"is_follow,required" form:"is_follow,required" query:"is_follow,required"`         // true-已关注，false-未关注
+	Id            int64  `protobuf:"varint,1,req,name=id" json:"id,required" form:"id,required" query:"id,required"`                                                   // 用户id
+	Name          string `protobuf:"bytes,2,req,name=name" json:"name,required" form:"name,required" query:"name,required"`                                            // 用户名称
+	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount" json:"follow_count" form:"follow_count" query:"follow_count"`           // 关注总数
+	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount" json:"follower_count" form:"follower_count" query:"follower_count"` // 粉丝总数
+	IsFollow      bool   `protobuf:"varint,5,req,name=is_follow,json=isFollow" json:"is_follow,required" form:"is_follow,required" query:"is_follow,required"`         // true-已关注，false-未关注
 }
 
 func (x *User) Reset() {
@@ -302,36 +302,36 @@ func (*User) Descriptor() ([]byte, []int) {
 }
 
 func (x *User) GetId() int64 {
-	if x != nil && x.Id != nil {
-		return *x.Id
+	if x != nil {
+		return x.Id
 	}
 	return 0
 }
 
 func (x *User) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
+	if x != nil {
+		return x.Name
 	}
 	return ""
 }
 
 func (x *User) GetFollowCount() int64 {
-	if x != nil && x.FollowCount != nil {
-		return *x.FollowCount
+	if x != nil  {
+		return x.FollowCount
 	}
 	return 0
 }
 
 func (x *User) GetFollowerCount() int64 {
-	if x != nil && x.FollowerCount != nil {
-		return *x.FollowerCount
+	if x != nil  {
+		return x.FollowerCount
 	}
 	return 0
 }
 
 func (x *User) GetIsFollow() bool {
-	if x != nil && x.IsFollow != nil {
-		return *x.IsFollow
+	if x != nil  {
+		return x.IsFollow
 	}
 	return false
 }
@@ -341,8 +341,8 @@ type DouyinRelationFollowerListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId *int64  `protobuf:"varint,1,req,name=user_id,json=userId" json:"user_id,required" form:"user_id,required" query:"user_id,required"` // 用户id
-	Token  *string `protobuf:"bytes,2,req,name=token" json:"token,required" form:"token,required" query:"token,required"`                      // 用户鉴权token
+	UserId int64  `protobuf:"varint,1,req,name=user_id,json=userId" json:"user_id,required" form:"user_id,required" query:"user_id,required"` // 用户id
+	Token  string `protobuf:"bytes,2,req,name=token" json:"token,required" form:"token,required" query:"token,required"`                      // 用户鉴权token
 }
 
 func (x *DouyinRelationFollowerListRequest) Reset() {
@@ -378,15 +378,15 @@ func (*DouyinRelationFollowerListRequest) Descriptor() ([]byte, []int) {
 }
 
 func (x *DouyinRelationFollowerListRequest) GetUserId() int64 {
-	if x != nil && x.UserId != nil {
-		return *x.UserId
+	if x != nil  {
+		return x.UserId
 	}
 	return 0
 }
 
 func (x *DouyinRelationFollowerListRequest) GetToken() string {
-	if x != nil && x.Token != nil {
-		return *x.Token
+	if x != nil  {
+		return x.Token
 	}
 	return ""
 }
@@ -396,8 +396,8 @@ type DouyinRelationFollowerListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode *int32  `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
-	StatusMsg  *string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
+	StatusCode int32  `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
 	UserList   []*User `protobuf:"bytes,3,rep,name=user_list,json=userList" json:"user_list" form:"user_list" query:"user_list"`                                       // 用户列表
 }
 
@@ -434,15 +434,15 @@ func (*DouyinRelationFollowerListResponse) Descriptor() ([]byte, []int) {
 }
 
 func (x *DouyinRelationFollowerListResponse) GetStatusCode() int32 {
-	if x != nil && x.StatusCode != nil {
-		return *x.StatusCode
+	if x != nil {
+		return x.StatusCode
 	}
 	return 0
 }
 
 func (x *DouyinRelationFollowerListResponse) GetStatusMsg() string {
-	if x != nil && x.StatusMsg != nil {
-		return *x.StatusMsg
+	if x != nil {
+		return x.StatusMsg
 	}
 	return ""
 }
@@ -459,8 +459,8 @@ type DouyinRelationFriendListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId *int64  `protobuf:"varint,1,req,name=user_id,json=userId" json:"user_id,required" form:"user_id,required" query:"user_id,required"` // 用户id
-	Token  *string `protobuf:"bytes,2,req,name=token" json:"token,required" form:"token,required" query:"token,required"`                      // 用户鉴权token
+	UserId int64  `protobuf:"varint,1,req,name=user_id,json=userId" json:"user_id,required" form:"user_id,required" query:"user_id,required"` // 用户id
+	Token  string `protobuf:"bytes,2,req,name=token" json:"token,required" form:"token,required" query:"token,required"`                      // 用户鉴权token
 }
 
 func (x *DouyinRelationFriendListRequest) Reset() {
@@ -496,15 +496,15 @@ func (*DouyinRelationFriendListRequest) Descriptor() ([]byte, []int) {
 }
 
 func (x *DouyinRelationFriendListRequest) GetUserId() int64 {
-	if x != nil && x.UserId != nil {
-		return *x.UserId
+	if x != nil  {
+		return x.UserId
 	}
 	return 0
 }
 
 func (x *DouyinRelationFriendListRequest) GetToken() string {
-	if x != nil && x.Token != nil {
-		return *x.Token
+	if x != nil  {
+		return x.Token
 	}
 	return ""
 }
@@ -514,8 +514,8 @@ type DouyinRelationFriendListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode *int32        `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
-	StatusMsg  *string       `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
+	StatusCode int32        `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string       `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
 	UserList   []*FriendUser `protobuf:"bytes,3,rep,name=user_list,json=userList" json:"user_list" form:"user_list" query:"user_list"`                                       // 用户列表
 }
 
@@ -552,15 +552,15 @@ func (*DouyinRelationFriendListResponse) Descriptor() ([]byte, []int) {
 }
 
 func (x *DouyinRelationFriendListResponse) GetStatusCode() int32 {
-	if x != nil && x.StatusCode != nil {
-		return *x.StatusCode
+	if x != nil  {
+		return x.StatusCode
 	}
 	return 0
 }
 
 func (x *DouyinRelationFriendListResponse) GetStatusMsg() string {
-	if x != nil && x.StatusMsg != nil {
-		return *x.StatusMsg
+	if x != nil {
+		return x.StatusMsg
 	}
 	return ""
 }
@@ -578,8 +578,8 @@ type FriendUser struct {
 	unknownFields protoimpl.UnknownFields
 
 	Friend  *User   `protobuf:"bytes,1,req,name=friend" json:"friend,required" form:"friend,required" query:"friend,required"`
-	Message *string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty" form:"message" query:"message"`                   // 和该好友的最新聊天消息
-	MsgType *int64  `protobuf:"varint,3,req,name=msgType" json:"msgType,required" form:"msgType,required" query:"msgType,required"` // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
+	Message string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty" form:"message" query:"message"`                   // 和该好友的最新聊天消息
+	MsgType int64  `protobuf:"varint,3,req,name=msgType" json:"msgType,required" form:"msgType,required" query:"msgType,required"` // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
 }
 
 func (x *FriendUser) Reset() {
@@ -622,15 +622,15 @@ func (x *FriendUser) GetFriend() *User {
 }
 
 func (x *FriendUser) GetMessage() string {
-	if x != nil && x.Message != nil {
-		return *x.Message
+	if x != nil  {
+		return x.Message
 	}
 	return ""
 }
 
 func (x *FriendUser) GetMsgType() int64 {
-	if x != nil && x.MsgType != nil {
-		return *x.MsgType
+	if x != nil  {
+		return x.MsgType
 	}
 	return 0
 }
