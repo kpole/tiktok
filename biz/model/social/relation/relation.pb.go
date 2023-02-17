@@ -578,8 +578,8 @@ type FriendUser struct {
 	unknownFields protoimpl.UnknownFields
 
 	Friend  *User   `protobuf:"bytes,1,req,name=friend" json:"friend,required" form:"friend,required" query:"friend,required"`
-	Message *string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty" form:"message" query:"message"`                   // 和该好友的最新聊天消息
-	MsgType *int64  `protobuf:"varint,3,req,name=msgType" json:"msgType,required" form:"msgType,required" query:"msgType,required"` // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
+	Message string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty" form:"message" query:"message"`                   // 和该好友的最新聊天消息
+	MsgType int64  `protobuf:"varint,3,req,name=msgType" json:"msgType,required" form:"msgType,required" query:"msgType,required"` // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
 }
 
 func (x *FriendUser) Reset() {
@@ -622,15 +622,15 @@ func (x *FriendUser) GetFriend() *User {
 }
 
 func (x *FriendUser) GetMessage() string {
-	if x != nil && x.Message != nil {
-		return *x.Message
+	if x != nil  {
+		return x.Message
 	}
 	return ""
 }
 
 func (x *FriendUser) GetMsgType() int64 {
-	if x != nil && x.MsgType != nil {
-		return *x.MsgType
+	if x != nil  {
+		return x.MsgType
 	}
 	return 0
 }
