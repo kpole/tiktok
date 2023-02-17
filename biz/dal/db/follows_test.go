@@ -8,8 +8,8 @@ import (
 func TestAddNewFollow(t *testing.T) {
 	Init()
 	f := Follows{
-		UserId:     1009,
-		FollowerId: 1010,
+		UserId:     1004,
+		FollowerId: 1002,
 	}
 	ok, err := AddNewFollow(&f)
 	if err != nil {
@@ -55,10 +55,22 @@ func TestGetFollowCount(t *testing.T) {
 
 func TestGetFolloweeCount(t *testing.T) {
 	Init()
-	cnt, err := GetFolloweeCount(1010)
+	cnt, err := GetFolloweeCount(1001)
 	if err != nil {
 		fmt.Println("false")
 		return
 	}
 	fmt.Println(cnt)
+}
+
+func TestGetFollowerList(t *testing.T) {
+	Init()
+	followerList, err := GetFollowerIdList(1001)
+	if err != nil {
+		fmt.Println("false")
+		return
+	}
+	for _, followerId := range followerList {
+		fmt.Println(followerId)
+	}
 }
