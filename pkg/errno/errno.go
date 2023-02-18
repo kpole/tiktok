@@ -12,6 +12,9 @@ const (
 	UserAlreadyExistErrCode    = 10003
 	UserIsNotExistErrCode      = 10004
 	AuthorizationFailedErrCode = 10005
+
+	FollowRelationAlreadyExistErrCode = 10006
+	FollowRelationNotExistErrCode     = 10007
 )
 
 const (
@@ -39,13 +42,15 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-	Success                = NewErrNo(SuccessCode, "Success")
-	ServiceErr             = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
-	ParamErr               = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
-	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User already exists")
-	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
-	UserIsNotExistErr      = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
-	PasswordIsNotVerified  = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
+	Success                       = NewErrNo(SuccessCode, "Success")
+	ServiceErr                    = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
+	ParamErr                      = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
+	UserAlreadyExistErr           = NewErrNo(UserAlreadyExistErrCode, "User already exists")
+	AuthorizationFailedErr        = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
+	UserIsNotExistErr             = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
+	PasswordIsNotVerified         = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
+	FollowRelationAlreadyExistErr = NewErrNo(FollowRelationAlreadyExistErrCode, "Follow Relation already exist")
+	FollowRelationNotExistErr     = NewErrNo(FollowRelationNotExistErrCode, "Follow Relation does not exist")
 )
 
 // ConvertErr convert error to Errno

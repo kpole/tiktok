@@ -56,3 +56,19 @@ func VerifyUser(userName string, password string) (int64, error) {
 	}
 	return user.ID, nil
 }
+
+//-----------------------Add By BourneHUST----------------------------//
+
+func CheckUserExistById(user_id int64) (bool, error) {
+	var user User
+	if err := DB.Where("id = ?", user_id).Find(&user).Error; err != nil {
+		return false, err
+	}
+	if user == (User{}) {
+		err := errno.UserIsNotExistErr
+		return false, err
+	}
+	return true, nil
+}
+
+//-----------------------------end------------------------------------//
