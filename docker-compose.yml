@@ -28,11 +28,6 @@ services:
     privileged: true
     restart: always
 
-  ffmpeg:
-    image: jrottenberg/ffmpeg
-    ports:
-      - 18003:8080
-    
   redis:
     image: redis
     container_name: redis7
