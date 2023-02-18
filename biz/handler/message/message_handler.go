@@ -5,9 +5,13 @@ package message
 import (
 	"context"
 
+	message "offer_tiktok/biz/model/social/message"
+	"offer_tiktok/biz/pack"
+	message_service "offer_tiktok/biz/service/message"
+	"offer_tiktok/pkg/errno"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	message "offer_tiktok/biz/model/social/message"
 )
 
 // MessageChat .
@@ -17,13 +21,31 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var req message.DouyinMessageChatRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, message.DouyinMessageChatResponse{
+			StatusCode:  resp.StatusCode,
+			StatusMsg:   resp.StatusMsg,
+			MessageList: []*message.Message{},
+		})
 		return
 	}
 
-	resp := new(message.DouyinMessageChatResponse)
+	messages, err := message_service.NewMessageService(ctx, c).GetMessageChat(&req)
+	if err != nil {
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, message.DouyinMessageChatResponse{
+			StatusCode:  resp.StatusCode,
+			StatusMsg:   resp.StatusMsg,
+			MessageList: messages,
+		})
+		return
+	}
 
-	c.JSON(consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, message.DouyinMessageChatResponse{
+		StatusCode:  errno.SuccessCode,
+		StatusMsg:   errno.SuccessMsg,
+		MessageList: messages,
+	})
 }
 
 // MessageAction .
@@ -33,11 +55,25 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var req message.DouyinMessageActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, message.DouyinMessageActionResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
 		return
 	}
 
-	resp := new(message.DouyinMessageActionResponse)
-
-	c.JSON(consts.StatusOK, resp)
+	err = message_service.NewMessageService(ctx, c).MessageAction(&req)
+	if err != nil {
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, message.DouyinMessageActionResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
+		return
+	}
+	c.JSON(consts.StatusOK, message.DouyinMessageActionResponse{
+		StatusCode: errno.SuccessCode,
+		StatusMsg:  errno.SuccessMsg,
+	})
 }

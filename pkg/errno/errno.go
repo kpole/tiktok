@@ -15,12 +15,14 @@ const (
 
 	FollowRelationAlreadyExistErrCode = 10006
 	FollowRelationNotExistErrCode     = 10007
+	MessageAddFailedErrCode           = 1008
 )
 
 const (
 	SuccessMsg               = "Success"
 	UserIsNotExistErrMsg     = "user is not exist"
 	PasswordIsNotVerifiedMsg = "username or password not verified"
+	MessageAddFailedErrMsg   = "message add failed"
 )
 
 type ErrNo struct {
@@ -51,6 +53,7 @@ var (
 	PasswordIsNotVerified         = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
 	FollowRelationAlreadyExistErr = NewErrNo(FollowRelationAlreadyExistErrCode, "Follow Relation already exist")
 	FollowRelationNotExistErr     = NewErrNo(FollowRelationNotExistErrCode, "Follow Relation does not exist")
+	MessageAddFailedErr           = NewErrNo(MessageAddFailedErrCode, MessageAddFailedErrMsg)
 )
 
 // ConvertErr convert error to Errno
