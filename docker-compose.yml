@@ -32,3 +32,15 @@ services:
     image: jrottenberg/ffmpeg
     ports:
       - 18003:8080
+    
+  redis:
+    image: redis
+    container_name: redis7
+    ports:
+      - 6379:6379
+    volumes:
+      - ./datadir:/data
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./logs:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
