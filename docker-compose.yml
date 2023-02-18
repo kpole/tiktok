@@ -27,3 +27,20 @@ services:
     command: server --console-address ':9001' /data  #指定容器中的目录 /data
     privileged: true
     restart: always
+
+  ffmpeg:
+    image: jrottenberg/ffmpeg
+    ports:
+      - 18003:8080
+    
+  redis:
+    image: redis
+    container_name: redis7
+    ports:
+      - 6379:6379
+    volumes:
+      - ./datadir:/data
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./logs:/logs
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
