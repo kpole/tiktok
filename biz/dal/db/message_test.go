@@ -56,3 +56,17 @@ func TestGetMessageByIdPair(t *testing.T) {
 	}
 	fmt.Println("OK")
 }
+
+// 查看好友列表时需要返回最新一条的聊天消息，故在此测试
+func TestGetLatestMessage(t *testing.T) {
+	Init()
+	var id1, id2 int64 = 1001, 1005
+	message, err := GetLatestMessageByIdPair(id1, id2)
+	if err != nil {
+		fmt.Println("false")
+	} else if message == nil {
+		fmt.Println("1001 与 1005 没有消息")
+	} else {
+		fmt.Printf("%v\n", message)
+	}
+}
