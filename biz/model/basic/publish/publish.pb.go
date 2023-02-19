@@ -56,12 +56,17 @@ type Video struct {
 
 
 type User struct {
-
-	Id            int64  `json:"id,required" form:"id,required" query:"id,required"`                                                   // 用户id
-	Name          string `json:"name,required" form:"name,required" query:"name,required"`                                            // 用户名称
-	FollowCount   int64  `json:"follow_count,omitempty" form:"follow_count" query:"follow_count"`           // 关注总数
-	FollowerCount int64  `json:"follower_count,omitempty" form:"follower_count" query:"follower_count"` // 粉丝总数
-	IsFollow      bool   `json:"is_follow,required" form:"is_follow,required" query:"is_follow,required"`         // true-已关注，false-未关注
+	Id              int64  `json:"id,required" form:"id,required" query:"id,required"`                      // 用户id
+	Name            string `json:"name,required" form:"name,required" query:"name,required"`                // 用户名称
+	FollowCount     int64  `json:"follow_count,omitempty" form:"follow_count" query:"follow_count"`         // 关注总数
+	FollowerCount   int64  `json:"follower_count,omitempty" form:"follower_count" query:"follower_count"`   // 粉丝总数
+	IsFollow        bool   `json:"is_follow,required" form:"is_follow,required" query:"is_follow,required"` // true-已关注，false-未关注
+	Avatar          string `json:"avatar" form:"avatar" query:"avatar"`
+	BackgroundImage string `json:"background_image" form:"background_image" query:"background_image"`
+	Signature       string `json:"signature" form:"signature" query:"signature"`
+	TotalFavorited  int64  `json:"total_favorited" form:"total_favorited" query:"total_favorited"`
+	WorkCount       int64  `json:"work_count" form:"work_count" query:"work_count"`
+	FavoriteCount   int64  `json:"favorite_count" form:"favorite_count" query:"favorite_count"`
 }
 
 

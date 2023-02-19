@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"log"
+	user_service "offer_tiktok/biz/service/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
 
@@ -33,29 +35,23 @@ func (s *FollowerListService) GetFollowerList(req *relation.DouyinRelationFollow
 	}
 
 	for _, follower := range dbfollowers {
-		user_info, err := db.QueryUserById(follower)
+		user_info, err := user_service.NewUserService(s.ctx, s.c).GetUserInfo(follower, current_user_id.(int64))
 		if err != nil {
-			return followerList, err
-		}
-		followCnt, err := db.GetFollowCount(user_info.ID)
-		if err != nil {
-			return followerList, err
-		}
-		followerCnt, err := db.GetFolloweeCount(user_info.ID)
-		if err != nil {
-			return followerList, err
-		}
-		_IsFollow, err := db.QueryFollowExist(&db.Follows{UserId: current_user_id.(int64), FollowerId: follower})
-		if err != nil {
-			return followerList, err
+			log.Printf("func error")
 		}
 
 		user := &relation.User{
-			Id:            user_info.ID,
-			Name:          user_info.UserName,
-			FollowCount:   followCnt,
-			FollowerCount: followerCnt,
-			IsFollow:      _IsFollow,
+			Id:              user_info.Id,
+			Name:            user_info.Name,
+			FollowCount:     user_info.FollowCount,
+			FollowerCount:   user_info.FollowerCount,
+			IsFollow:        user_info.IsFollow,
+			Avatar:          user_info.Avatar,
+			BackgroundImage: user_info.BackgroundImage,
+			Signature:       user_info.BackgroundImage,
+			TotalFavorited:  user_info.TotalFavorited,
+			WorkCount:       user_info.WorkCount,
+			FavoriteCount:   user_info.FavoriteCount,
 		}
 		followerList = append(followerList, user)
 	}

@@ -8,6 +8,7 @@ import (
 	"offer_tiktok/biz/dal/db"
 	user "offer_tiktok/biz/model/basic/user"
 	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 )
@@ -96,8 +97,8 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 		FollowCount:     FollowCount,
 		FollowerCount:   FolloweeCount,
 		IsFollow:        IsFollow,
-		Avatar:          dbUser.Avatar,
-		BackgroundImage: dbUser.BackgroundImage,
+		Avatar:          utils.URLconvert(s.ctx, s.c, dbUser.Avatar),
+		BackgroundImage: utils.URLconvert(s.ctx, s.c, dbUser.BackgroundImage),
 		Signature:       dbUser.Signature,
 		TotalFavorited:  0,
 		WorkCount:       WorkCount,
