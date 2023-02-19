@@ -15,6 +15,9 @@ const (
 
 	FollowRelationAlreadyExistErrCode = 10006
 	FollowRelationNotExistErrCode     = 10007
+
+	FavoriteRelationAlreadyExistErrCode = 10008
+	FavoriteRelationNotExistErrCode     = 10009
 )
 
 const (
@@ -42,15 +45,17 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-	Success                       = NewErrNo(SuccessCode, "Success")
-	ServiceErr                    = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
-	ParamErr                      = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
-	UserAlreadyExistErr           = NewErrNo(UserAlreadyExistErrCode, "User already exists")
-	AuthorizationFailedErr        = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
-	UserIsNotExistErr             = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
-	PasswordIsNotVerified         = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
-	FollowRelationAlreadyExistErr = NewErrNo(FollowRelationAlreadyExistErrCode, "Follow Relation already exist")
-	FollowRelationNotExistErr     = NewErrNo(FollowRelationNotExistErrCode, "Follow Relation does not exist")
+	Success                         = NewErrNo(SuccessCode, "Success")
+	ServiceErr                      = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
+	ParamErr                        = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
+	UserAlreadyExistErr             = NewErrNo(UserAlreadyExistErrCode, "User already exists")
+	AuthorizationFailedErr          = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
+	UserIsNotExistErr               = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
+	PasswordIsNotVerified           = NewErrNo(AuthorizationFailedErrCode, PasswordIsNotVerifiedMsg)
+	FollowRelationAlreadyExistErr   = NewErrNo(FollowRelationAlreadyExistErrCode, "Follow Relation already exist")
+	FollowRelationNotExistErr       = NewErrNo(FollowRelationNotExistErrCode, "Follow Relation does not exist")
+	FavoriteRelationAlreadyExistErr = NewErrNo(FavoriteRelationAlreadyExistErrCode, "Favorite Relation already exist")
+	FavoriteRelationNotExistErr     = NewErrNo(FavoriteRelationNotExistErrCode, "FavoriteRelationNotExistErr")
 )
 
 // ConvertErr convert error to Errno
