@@ -18,15 +18,16 @@ const (
 
 	FavoriteRelationAlreadyExistErrCode = 10008
 	FavoriteRelationNotExistErrCode     = 10009
+	FavoriteActionErrCode               = 10010
 
-	MessageAddFailedErrCode           = 1008
-
+	MessageAddFailedErrCode = 10011
 )
 
 const (
 	SuccessMsg               = "Success"
 	UserIsNotExistErrMsg     = "user is not exist"
 	PasswordIsNotVerifiedMsg = "username or password not verified"
+	FavoriteActionErrMsg     = "favorite add failed"
 	MessageAddFailedErrMsg   = "message add failed"
 )
 
@@ -49,7 +50,6 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-
 	Success                         = NewErrNo(SuccessCode, "Success")
 	ServiceErr                      = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
 	ParamErr                        = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
@@ -61,9 +61,9 @@ var (
 	FollowRelationNotExistErr       = NewErrNo(FollowRelationNotExistErrCode, "Follow Relation does not exist")
 	FavoriteRelationAlreadyExistErr = NewErrNo(FavoriteRelationAlreadyExistErrCode, "Favorite Relation already exist")
 	FavoriteRelationNotExistErr     = NewErrNo(FavoriteRelationNotExistErrCode, "FavoriteRelationNotExistErr")
+	FavoriteActionErr               = NewErrNo(FavoriteActionErrCode, FavoriteActionErrMsg)
 
-	MessageAddFailedErr           = NewErrNo(MessageAddFailedErrCode, MessageAddFailedErrMsg)
-
+	MessageAddFailedErr = NewErrNo(MessageAddFailedErrCode, MessageAddFailedErrMsg)
 )
 
 // ConvertErr convert error to Errno

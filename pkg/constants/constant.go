@@ -2,10 +2,11 @@ package constants
 
 const (
 	// NoteTableName           = "note"
-	UserTableName    = "users"
-	FollowsTableName = "follows"
-	VideosTableName  = "videos"
-	MessageTableName = "messages"
+	UserTableName      = "users"
+	FollowsTableName   = "follows"
+	VideosTableName    = "videos"
+	MessageTableName   = "messages"
+	FavoritesTableName = "likes"
 	// SecretKey               = "secret key"
 	// IdentityKey             = "id"
 	// Total                   = "total"
@@ -19,7 +20,9 @@ const (
 	// CPURateLimit    float64 = 80.0
 	// DefaultLimit            = 10
 
-	VideoFeedCount = 30
+	VideoFeedCount       = 30
+	FavoriteActionType   = 1
+	UnFavoriteActionType = 2
 
 	MinioEndPoint        = "localhost:18001"
 	MinioAccessKeyID     = "douyin"

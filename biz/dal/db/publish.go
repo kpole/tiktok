@@ -43,3 +43,15 @@ func GetVideoByUserID(user_id int64) ([]*Video, error) {
 	}
 	return videos, err
 }
+
+func CheckVideoExistById(video_id int64) (bool, error) {
+	var video Video
+	err := DB.Where("id = ?", video_id).Find(&video).Error
+	if err != nil {
+		return false, err
+	}
+	if video == (Video{}) {
+		return false, nil
+	}
+	return true, nil
+}
