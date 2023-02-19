@@ -7,6 +7,7 @@ import (
 	"io"
 	"offer_tiktok/biz/dal/db"
 	user "offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/errno"
 	"offer_tiktok/pkg/utils"
 
@@ -41,9 +42,9 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 	user_id, err = db.CreateUser(&db.User{
 		UserName:        req.Username,
 		Password:        passWord,
-		Avatar:          "",
-		BackgroundImage: "",
-		Signature:       "",
+		Avatar:          constants.TestAva,
+		BackgroundImage: constants.TestBackground,
+		Signature:       constants.TestSign,
 	})
 	return user_id, nil
 }
