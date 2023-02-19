@@ -47,7 +47,15 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(publish.DouyinPublishListResponse)
+	resp, err := service.NewPublishService(ctx, c).PublishList(&req)
 
+	if err != nil {
+		bresp := pack.BuildBaseResp(err)
+		resp.StatusCode = bresp.StatusCode
+		resp.StatusMsg = bresp.StatusMsg
+		c.JSON(consts.StatusOK, resp)
+	}
+	resp.StatusCode = errno.SuccessCode
+	resp.StatusMsg = errno.SuccessMsg
 	c.JSON(consts.StatusOK, resp)
 }
