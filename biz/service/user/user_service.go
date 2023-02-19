@@ -38,8 +38,11 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 	}
 	passWord := fmt.Sprintf("%x", h.Sum(nil))
 	user_id, err = db.CreateUser(&db.User{
-		UserName: req.Username,
-		Password: passWord,
+		UserName:        req.Username,
+		Password:        passWord,
+		Avatar:          "",
+		BackgroundImage: "",
+		Signature:       "",
 	})
 	return user_id, nil
 }
@@ -51,23 +54,6 @@ func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*user.User, error) 
 	if !exists {
 		current_user_id = 0
 	}
-
-	// u, err := db.QueryUserById(query_user_id)
-
-	// if err != nil {
-	// 	return resp, err
-	// }
-	// FollowCount, err := db.GetFollowCount(u.ID)
-	// FolloweeCount, err := db.GetFolloweeCount(u.ID)
-	// IsFollow, err := db.QueryFollowExist(&db.Follows{UserId: query_user_id, FollowerId: current_user_id.(int64)})
-
-	// resp = &user.User{
-	// 	Id:            u.ID,
-	// 	Name:          u.UserName,
-	// 	FollowCount:   FollowCount,
-	// 	FollowerCount: FolloweeCount,
-	// 	IsFollow:      IsFollow,
-	// }
 	return s.GetUserInfo(query_user_id, current_user_id.(int64))
 }
 
@@ -81,6 +67,10 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 	u := &user.User{}
 
 	dbUser, err := db.QueryUserById(query_user_id)
+	if err != nil {
+		return u, err
+	}
+	WorkCount, err := db.GetWorkCount(query_user_id)
 	if err != nil {
 		return u, err
 	}
@@ -101,11 +91,17 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 	}
 
 	u = &user.User{
-		Id:            query_user_id,
-		Name:          dbUser.UserName,
-		FollowCount:   FollowCount,
-		FollowerCount: FolloweeCount,
-		IsFollow:      IsFollow,
+		Id:              query_user_id,
+		Name:            dbUser.UserName,
+		FollowCount:     FollowCount,
+		FollowerCount:   FolloweeCount,
+		IsFollow:        IsFollow,
+		Avatar:          dbUser.Avatar,
+		BackgroundImage: dbUser.BackgroundImage,
+		Signature:       dbUser.Signature,
+		TotalFavorited:  0,
+		WorkCount:       WorkCount,
+		FavoriteCount:   0,
 	}
 	return u, nil
 }
