@@ -7,6 +7,7 @@ import (
 
 	"offer_tiktok/biz/dal/db"
 	relation "offer_tiktok/biz/model/social/relation"
+	"offer_tiktok/pkg/errno"
 )
 
 type FriendListService struct {
@@ -22,6 +23,13 @@ func NewFriendListService(ctx context.Context, c *app.RequestContext) *FriendLis
 func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendListRequest) ([]*relation.FriendUser, error) {
 	user_id := req.UserId
 	// token := req.Token
+	current_user_id, _ := s.c.Get("current_user_id")
+
+	// 只有本人才可以看本人的好友列表
+	if current_user_id.(int64) != user_id {
+		return nil, errno.FriendListNoPremissionErr
+	}
+
 	var friendList []*relation.FriendUser
 
 	// 首先获得 user_id 所有粉丝
@@ -49,6 +57,19 @@ func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendList
 			if err != nil {
 				return friendList, err
 			}
+			message, err := db.GetLatestMessageByIdPair(user_id, id)
+			if err != nil {
+				return friendList, err
+			}
+			var msgType int64
+			if message == nil { // 自定义2表示双方无聊天记录
+				msgType = 2
+				message = &db.Messages{}
+			} else if user_id == message.FromUserId {
+				msgType = 1
+			} else {
+				msgType = 0
+			}
 
 			friendList = append(friendList, &relation.FriendUser{
 				Friend: &relation.User{
@@ -60,8 +81,8 @@ func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendList
 					IsFollow: true,
 				},
 				// 这两个字段的获得可能得有其它同学的聊天记录消息接口
-				Message: "this is a message",
-				MsgType: -1,
+				Message: message.Content,
+				MsgType: msgType,
 			})
 		}
 	}

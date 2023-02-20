@@ -9,11 +9,12 @@ import (
 	"offer_tiktok/biz/pack"
 	"offer_tiktok/pkg/errno"
 
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	follow_service "offer_tiktok/biz/service/relation/follow"
 	followerList_service "offer_tiktok/biz/service/relation/follower"
 	friendList_service "offer_tiktok/biz/service/relation/friend"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // RelationAction .
@@ -96,6 +97,7 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowerListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
+			UserList:   nil,
 		})
 		return
 	}
@@ -106,6 +108,7 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowerListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
+			UserList:   nil,
 		})
 	} else {
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowerListResponse{
@@ -128,6 +131,7 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, relation.DouyinRelationFriendListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
+			UserList:   nil,
 		})
 		return
 	}
@@ -138,6 +142,7 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusOK, relation.DouyinRelationFriendListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
+			UserList:   nil,
 		})
 	} else {
 		c.JSON(consts.StatusOK, relation.DouyinRelationFriendListResponse{

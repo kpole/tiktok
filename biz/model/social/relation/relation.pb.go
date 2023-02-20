@@ -36,8 +36,8 @@ type DouyinRelationFollowerListRequest struct {
 }
 
 type DouyinRelationFollowerListResponse struct {
-	StatusCode int32  `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
+	StatusCode int32   `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string  `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
 	UserList   []*User `protobuf:"bytes,3,rep,name=user_list,json=userList" json:"user_list" form:"user_list" query:"user_list"`                                       // 用户列表
 }
 
@@ -47,13 +47,13 @@ type DouyinRelationFriendListRequest struct {
 }
 
 type DouyinRelationFriendListResponse struct {
-	StatusCode int32        `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string       `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
+	StatusCode int32         `protobuf:"varint,1,req,name=status_code,json=statusCode" json:"status_code,required" form:"status_code,required" query:"status_code,required"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string        `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg" json:"status_msg,omitempty" form:"status_msg" query:"status_msg"`                        // 返回状态描述
 	UserList   []*FriendUser `protobuf:"bytes,3,rep,name=user_list,json=userList" json:"user_list" form:"user_list" query:"user_list"`                                       // 用户列表
 }
 
 type FriendUser struct {
-	Friend  *User   `protobuf:"bytes,1,req,name=friend" json:"friend,required" form:"friend,required" query:"friend,required"`
+	Friend  *User  `protobuf:"bytes,1,req,name=friend" json:"friend,required" form:"friend,required" query:"friend,required"`
 	Message string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty" form:"message" query:"message"`                   // 和该好友的最新聊天消息
 	MsgType int64  `protobuf:"varint,3,req,name=msgType" json:"msgType,required" form:"msgType,required" query:"msgType,required"` // message消息的类型，0 => 当前请求用户接收的消息， 1 => 当前请求用户发送的消息
 }
