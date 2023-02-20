@@ -6,9 +6,12 @@ import (
 )
 
 type User struct {
-	ID       int64  `json:"id"`
-	UserName string `json:"user_name"`
-	Password string `json:"password"`
+	ID              int64  `json:"id"`
+	UserName        string `json:"user_name"`
+	Password        string `json:"password"`
+	Avatar          string `json:"avatar"`
+	BackgroundImage string `json:"background_image"`
+	Signature       string `json:"signature"`
 }
 
 func (u *User) TableName() string {
