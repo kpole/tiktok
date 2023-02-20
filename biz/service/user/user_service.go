@@ -92,6 +92,8 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 		IsFollow = false
 	}
 
+	fmt.Printf("user: %v", dbUser)
+
 	u = &user.User{
 		Id:              query_user_id,
 		Name:            dbUser.UserName,

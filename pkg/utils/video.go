@@ -22,6 +22,9 @@ func NewFileName(user_id int64, time int64) string {
  * @return {string} fullURL
  */
 func URLconvert(ctx context.Context, c *app.RequestContext, path string) (fullURL string) {
+	if len(path) == 0 {
+		return ""
+	}
 	arr := strings.Split(path, "/")
 	u, err := minio.GetObjURL(ctx, arr[0], arr[1])
 	if err != nil {

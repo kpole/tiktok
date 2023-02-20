@@ -6,6 +6,7 @@ import (
 	relation "offer_tiktok/biz/model/social/relation"
 	"offer_tiktok/pkg/errno"
 	"github.com/cloudwego/hertz/pkg/app"
+	user_service "offer_tiktok/biz/service/user"
 )
 
 const (
@@ -75,8 +76,34 @@ func (r *RelationService) GetFollowList(req *relation.DouyinRelationFollowListRe
 	if err != nil {
 		return nil, err
 	}
+
+	var followList []relation.User
 	// 获取current_user_id
 	current_user_id, _ := r.c.Get("current_user_id")
-	//current_user_id := int64(temp.(float64))
-	return db.GetFollowInfo(current_user_id.(int64), req.UserId)
+	dbfollows, err := db.GetFollowIdList(current_user_id.(int64))
+	if err != nil {
+		return followList, err
+	}
+
+	for _, follow := range dbfollows {
+		user_info, err := user_service.NewUserService(r.ctx, r.c).GetUserInfo(follow, current_user_id.(int64))
+		if err != nil {
+			continue
+		}
+		user := relation.User{
+			Id:              user_info.Id,
+			Name:            user_info.Name,
+			FollowCount:     user_info.FollowCount,
+			FollowerCount:   user_info.FollowerCount,
+			IsFollow:        user_info.IsFollow,
+			Avatar:          user_info.Avatar,
+			BackgroundImage: user_info.BackgroundImage,
+			Signature:       user_info.BackgroundImage,
+			TotalFavorited:  user_info.TotalFavorited,
+			WorkCount:       user_info.WorkCount,
+			FavoriteCount:   user_info.FavoriteCount,
+		}
+		followList = append(followList, user)
+	}
+	return followList, nil
 }
