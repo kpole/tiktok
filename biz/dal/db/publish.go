@@ -52,3 +52,14 @@ func GetWorkCount(user_id int64) (int64, error) {
 	}
 	return count, nil
 }
+
+func CheckVideoExistById(video_id int64) (bool, error) {
+	var video Video
+	if err := DB.Where("id = ?", video_id).Find(&video).Error; err != nil {
+		return false, err
+	}
+	if video == (Video{}) {
+		return false, nil
+	}
+	return true, nil
+}

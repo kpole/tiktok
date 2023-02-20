@@ -6,6 +6,7 @@ const (
 	FollowsTableName = "follows"
 	VideosTableName  = "videos"
 	MessageTableName = "messages"
+	CommentTableName = "comments"
 	// SecretKey               = "secret key"
 	// IdentityKey             = "id"
 	// Total                   = "total"

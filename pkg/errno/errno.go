@@ -21,6 +21,9 @@ const (
 
 	FriendListNoPremissionErrCode = 10010
 
+	VideoIsNotExistErrCode   = 10011
+	CommentIsNotExistErrCode = 10012
+
 	MessageAddFailedErrCode = 1008
 )
 
@@ -30,6 +33,8 @@ const (
 	PasswordIsNotVerifiedMsg  = "username or password not verified"
 	MessageAddFailedErrMsg    = "message add failed"
 	FriendListNoPremissionMsg = "You can't query his friend list"
+	VideoIsNotExistErrMsg     = "video is not exist"
+	CommentIsNotExistErrMsg   = "comment is not exist"
 )
 
 type ErrNo struct {
@@ -62,9 +67,10 @@ var (
 	FollowRelationNotExistErr       = NewErrNo(FollowRelationNotExistErrCode, "Follow Relation does not exist")
 	FavoriteRelationAlreadyExistErr = NewErrNo(FavoriteRelationAlreadyExistErrCode, "Favorite Relation already exist")
 	FavoriteRelationNotExistErr     = NewErrNo(FavoriteRelationNotExistErrCode, "FavoriteRelationNotExistErr")
-
-	MessageAddFailedErr       = NewErrNo(MessageAddFailedErrCode, MessageAddFailedErrMsg)
-	FriendListNoPremissionErr = NewErrNo(FriendListNoPremissionErrCode, FriendListNoPremissionMsg)
+	MessageAddFailedErr             = NewErrNo(MessageAddFailedErrCode, MessageAddFailedErrMsg)
+	FriendListNoPremissionErr       = NewErrNo(FriendListNoPremissionErrCode, FriendListNoPremissionMsg)
+	VideoIsNotExistErr              = NewErrNo(VideoIsNotExistErrCode, VideoIsNotExistErrMsg)
+	CommentIsNotExistErr            = NewErrNo(CommentIsNotExistErrCode, CommentIsNotExistErrMsg)
 )
 
 // ConvertErr convert error to Errno
