@@ -88,11 +88,17 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 			log.Printf("func error")
 		}
 		video.Author = &feed.User{
-			Id:            author.Id,
-			Name:          author.Name,
-			FollowCount:   author.FollowCount,
-			FollowerCount: author.FollowerCount,
-			IsFollow:      author.IsFollow,
+			Id:              author.Id,
+			Name:            author.Name,
+			FollowCount:     author.FollowCount,
+			FollowerCount:   author.FollowerCount,
+			IsFollow:        author.IsFollow,
+			Avatar:          author.Avatar,
+			BackgroundImage: author.BackgroundImage,
+			Signature:       author.BackgroundImage,
+			TotalFavorited:  author.TotalFavorited,
+			WorkCount:       author.WorkCount,
+			FavoriteCount:   author.FavoriteCount,
 		}
 
 		wg.Done()
