@@ -11,6 +11,7 @@ import (
 )
 
 // user_id 关注了 follower_id
+// user_id 关注了 follower_id
 type Follows struct {
 	ID         int64          `json:"id"`
 	UserId     int64          `json:"user_id"`
@@ -255,5 +256,3 @@ func GetFollowInfo(current_user_id int64, user_id int64) ([]relation.User, error
 	}
 	return result, nil
 }
-
-//------------------------------------------end---------------------------------//

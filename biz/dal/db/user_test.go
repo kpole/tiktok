@@ -21,7 +21,7 @@ func TestCreateUser(t *testing.T) {
 
 func TestQueryUser(t *testing.T) {
 	Init()
-	user, err := QueryUser("test2")
+	user, err := QueryUser("1")
 	if err != nil {
 		fmt.Println(false)
 		return

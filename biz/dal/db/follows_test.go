@@ -8,8 +8,8 @@ import (
 func TestAddNewFollow(t *testing.T) {
 	Init()
 	f := Follows{
-		UserId:     1004,
-		FollowerId: 1002,
+		UserId:     1001,
+		FollowerId: 1004,
 	}
 	ok, err := AddNewFollow(&f)
 	if err != nil {
