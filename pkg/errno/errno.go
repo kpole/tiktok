@@ -18,8 +18,7 @@ const (
 
 	FavoriteRelationAlreadyExistErrCode = 10008
 	FavoriteRelationNotExistErrCode     = 10009
-
-	FriendListNoPremissionErrCode = 10010
+	FriendListNoPremissionErrCode       = 10010
 
 	MessageAddFailedErrCode = 1008
 )
