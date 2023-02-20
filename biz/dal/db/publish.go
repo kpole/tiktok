@@ -43,3 +43,12 @@ func GetVideoByUserID(user_id int64) ([]*Video, error) {
 	}
 	return videos, err
 }
+
+func GetWorkCount(user_id int64) (int64, error) {
+	var count int64
+	err := DB.Model(&Video{}).Where("author_id = ?", user_id).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}

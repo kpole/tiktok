@@ -255,11 +255,17 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id" form:"id" query:"id"`                                                                    // 用户id
-	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name" form:"name" query:"name"`                                                             // 用户名称
-	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count" form:"follow_count" query:"follow_count"`           // 关注总数
-	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count" form:"follower_count" query:"follower_count"` // 粉丝总数
-	IsFollow      bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow" form:"is_follow" query:"is_follow"`                          // true-已关注，false-未关注
+	Id              int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id" form:"id" query:"id"`                                                                    // 用户id
+	Name            string `protobuf:"bytes,2,opt,name=name,proto3" json:"name" form:"name" query:"name"`                                                             // 用户名称
+	FollowCount     int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count" form:"follow_count" query:"follow_count"`           // 关注总数
+	FollowerCount   int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count" form:"follower_count" query:"follower_count"` // 粉丝总数
+	IsFollow        bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow" form:"is_follow" query:"is_follow"`                          // true-已关注，false-未关注
+	Avatar          string `json:"avatar" form:"avatar" query:"avatar"`
+	BackgroundImage string `json:"background_image" form:"background_image" query:"background_image"`
+	Signature       string `json:"signature" form:"signature" query:"signature"`
+	TotalFavorited  int64  `json:"total_favorited" form:"total_favorited" query:"total_favorited"`
+	WorkCount       int64  `json:"work_count" form:"work_count" query:"work_count"`
+	FavoriteCount   int64  `json:"favorite_count" form:"favorite_count" query:"favorite_count"`
 }
 
 func (x *User) Reset() {
