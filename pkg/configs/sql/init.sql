@@ -95,4 +95,21 @@ CREATE TABLE `videos` (
   KEY `author` (`author_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8 COMMENT='视频表';
 
+-- ----------------------------
+-- Table structure for messages
+-- ----------------------------
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE `messages` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '消息ID',
+  `to_user_id` bigint NOT NULL COMMENT '该消息接受者ID',
+  `from_user_id` bigint NOT NULL COMMENT '该消息发送者ID',
+  `content` text NOT NULL COMMENT '消息内容',
+  `created_at` datetime(6) NOT NULL COMMENT '消息创建时间',
+  PRIMARY KEY (`id`),
+  KEY `create_time` (`created_at`) USING BTREE,
+  KEY `pair_user_id` (`to_user_id`, `from_user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
 SET FOREIGN_KEY_CHECKS = 1;
+
+
