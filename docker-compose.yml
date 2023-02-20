@@ -12,6 +12,8 @@ services:
       - MYSQL_USER=douyin
       - MYSQL_PASSWORD=douyin123
       - MYSQL_RANDOM_ROOT_PASSWORD="yes"
+    restart: always
+
   
   minio:
     image: minio/minio

@@ -2,10 +2,11 @@ package constants
 
 const (
 	// NoteTableName           = "note"
-	UserTableName    = "users"
-	FollowsTableName = "follows"
-	VideosTableName  = "videos"
-	MessageTableName = "messages"
+	UserTableName      = "users"
+	FollowsTableName   = "follows"
+	VideosTableName    = "videos"
+	MessageTableName   = "messages"
+	FavoritesTableName = "favorites"
 	// SecretKey               = "secret key"
 	// IdentityKey             = "id"
 	// Total                   = "total"
