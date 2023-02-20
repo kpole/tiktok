@@ -25,10 +25,11 @@ const (
 )
 
 const (
-	SuccessMsg                = "Success"
-	UserIsNotExistErrMsg      = "user is not exist"
-	PasswordIsNotVerifiedMsg  = "username or password not verified"
-	FavoriteActionErrMsg      = "favorite add failed"
+	SuccessMsg               = "Success"
+	UserIsNotExistErrMsg     = "user is not exist"
+	PasswordIsNotVerifiedMsg = "username or password not verified"
+	FavoriteActionErrMsg     = "favorite add failed"
+
 	MessageAddFailedErrMsg    = "message add failed"
 	FriendListNoPremissionMsg = "You can't query his friend list"
 )
