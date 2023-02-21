@@ -59,18 +59,6 @@ func GetVideoListByVideoIDList(video_id_list []int64) ([]*Video, error) {
 	return video_list, err
 }
 
-func CheckVideoExistById(video_id int64) (bool, error) {
-	var video Video
-	err := DB.Where("id = ?", video_id).Find(&video).Error
-	if err != nil {
-		return false, err
-	}
-	if video == (Video{}) {
-		return false, nil
-	}
-	return true, nil
-}
-
 func GetWorkCount(user_id int64) (int64, error) {
 	var count int64
 	err := DB.Model(&Video{}).Where("author_id = ?", user_id).Count(&count).Error
@@ -78,4 +66,15 @@ func GetWorkCount(user_id int64) (int64, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+func CheckVideoExistById(video_id int64) (bool, error) {
+	var video Video
+	if err := DB.Where("id = ?", video_id).Find(&video).Error; err != nil {
+		return false, err
+	}
+	if video == (Video{}) {
+		return false, nil
+	}
+	return true, nil
 }
