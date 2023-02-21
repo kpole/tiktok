@@ -58,7 +58,14 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(comment.DouyinCommentListResponse)
-
+	resp, err := comment_service.NewCommentService(ctx, c).CommentList(&req)
+	if err != nil {
+		resp := pack.BuildBaseResp(err)
+		c.JSON(consts.StatusOK, comment.DouyinCommentActionResponse{
+			StatusCode: resp.StatusCode,
+			StatusMsg:  resp.StatusMsg,
+		})
+		return
+	}
 	c.JSON(consts.StatusOK, resp)
 }

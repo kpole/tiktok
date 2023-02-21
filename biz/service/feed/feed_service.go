@@ -31,7 +31,7 @@ func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedRespons
 	if req.LatestTime == 0 {
 		lastTime = time.Now()
 	} else {
-		lastTime = time.Unix(req.LatestTime / 1000, 0)
+		lastTime = time.Unix(req.LatestTime/1000, 0)
 	}
 	fmt.Printf("LastTime: %v\n", lastTime)
 	current_user_id, exists := s.c.Get("current_user_id")
@@ -116,7 +116,11 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 	}()
 
 	go func() {
-		video.CommentCount = 0
+		err := *new(error)
+		video.CommentCount, err = db.GetCommentCountByVideoID(data.ID)
+		if err != nil {
+			log.Printf("func error")
+		}
 		wg.Done()
 	}()
 
