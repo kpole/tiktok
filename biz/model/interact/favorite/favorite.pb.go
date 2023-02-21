@@ -263,7 +263,7 @@ type Video struct {
 	unknownFields protoimpl.UnknownFields
 
 	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" form:"id" query:"id"`                                                                    // 视频唯一标识
-	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty" form:"author" query:"author"`                                                     // 视频作者信息
+	Author        User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty" form:"author" query:"author"`                                                     // 视频作者信息
 	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url,omitempty" form:"play_url" query:"play_url"`                                // 视频播放地址
 	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty" form:"cover_url" query:"cover_url"`                           // 视频封面地址
 	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count,omitempty" form:"favorite_count" query:"favorite_count"` // 视频的点赞总数
@@ -311,12 +311,7 @@ func (x *Video) GetId() int64 {
 	return 0
 }
 
-func (x *Video) GetAuthor() *User {
-	if x != nil {
-		return x.Author
-	}
-	return nil
-}
+
 
 func (x *Video) GetPlayUrl() string {
 	if x != nil {
@@ -370,6 +365,12 @@ type User struct {
 	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count,omitempty" form:"follow_count" query:"follow_count"`           // 关注总数
 	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count,omitempty" form:"follower_count" query:"follower_count"` // 粉丝总数
 	IsFollow      bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow,omitempty" form:"is_follow" query:"is_follow"`                          // true-已关注，false-未关注
+	Avatar          string `json:"avatar" form:"avatar" query:"avatar"`
+	BackgroundImage string `json:"background_image" form:"background_image" query:"background_image"`
+	Signature       string `json:"signature" form:"signature" query:"signature"`
+	TotalFavorited  int64  `json:"total_favorited" form:"total_favorited" query:"total_favorited"`
+	WorkCount       int64  `json:"work_count" form:"work_count" query:"work_count"`
+	FavoriteCount   int64  `json:"favorite_count" form:"favorite_count" query:"favorite_count"`
 }
 
 func (x *User) Reset() {

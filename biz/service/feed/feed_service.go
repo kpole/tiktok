@@ -106,20 +106,25 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 
 	// 获取视频点赞数量
 	go func() {
-		// TODO: favorite_service
-		video.FavoriteCount = 0
+		err := *new(error)
+		video.FavoriteCount, err = db.GetFavoriteCount(data.ID)
+		if err != nil {
+			log.Printf("func error")
+		}
 		wg.Done()
 	}()
 
 	go func() {
-		// TODO
 		video.CommentCount = 0
 		wg.Done()
 	}()
 
 	go func() {
-		// TODO
-		video.IsFavorite = false
+		err := *new(error)
+		video.IsFavorite, err = db.QueryFavoriteExist(data.ID, userId)
+		if err != nil {
+			log.Printf("func error")
+		}
 		wg.Done()
 	}()
 

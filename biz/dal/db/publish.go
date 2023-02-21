@@ -44,6 +44,21 @@ func GetVideoByUserID(user_id int64) ([]*Video, error) {
 	return videos, err
 }
 
+func GetVideoListByVideoIDList(video_id_list []int64) ([]*Video, error) {
+	var video_list []*Video
+	var err error
+	for _, item := range video_id_list {
+		var video *Video
+		err = DB.Where("id = ?", item).Find(&video).Error
+		if err != nil {
+			return video_list, err
+		}
+		video_list = append(video_list, video)
+	}
+
+	return video_list, err
+}
+
 func CheckVideoExistById(video_id int64) (bool, error) {
 	var video Video
 	err := DB.Where("id = ?", video_id).Find(&video).Error

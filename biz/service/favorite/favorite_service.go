@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 	"offer_tiktok/biz/dal/db"
+	"offer_tiktok/biz/model/basic/feed"
 	favorite "offer_tiktok/biz/model/interact/favorite"
+	feed_service "offer_tiktok/biz/service/feed"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/errno"
 
@@ -66,12 +68,44 @@ func (r *FavoriteService) FavoriteAction(req *favorite.DouyinFavoriteActionReque
 // request parameters:
 // string token;       // 用户鉴权token
 // int64  user_id;     // 用户id
-func (r *FavoriteService) GetFavoriteList(req *favorite.DouyinFavoriteListRequest) (favoritelist []favorite.Video, err error) {
-	_, err = db.CheckUserExistById(req.UserId)
+func (r *FavoriteService) GetFavoriteList(req *favorite.DouyinFavoriteListRequest) (favoritelist []*favorite.Video, err error) {
+	query_user_id := req.UserId
+	_, err = db.CheckUserExistById(query_user_id)
+
 	if err != nil {
 		return nil, err
 	}
 	// 获取current_user_id
 	current_user_id, _ := r.c.Get("current_user_id")
-	return db.GetFavoriteInfo(current_user_id.(int64), req.UserId)
+
+	video_id_list, err := db.GetFavoriteIdList(query_user_id)
+
+	dbVideos, err := db.GetVideoListByVideoIDList(video_id_list)
+	var videos []*feed.Video
+	f := feed_service.NewFeedService(r.ctx, r.c)
+	err = f.CopyVideos(&videos, &dbVideos, current_user_id.(int64))
+	for _, item := range videos {
+		video := &favorite.Video{
+			Id: item.Id,
+			Author: favorite.User{
+				Id:              item.Author.Id,
+				Name:            item.Author.Name,
+				FollowCount:     item.Author.FollowCount,
+				FollowerCount:   item.Author.FollowerCount,
+				Avatar:          item.Author.Avatar,
+				BackgroundImage: item.Author.BackgroundImage,
+				Signature:       item.Author.Signature,
+				TotalFavorited:  item.Author.TotalFavorited,
+				WorkCount:       item.Author.WorkCount,
+			},
+			PlayUrl:       item.PlayUrl,
+			CoverUrl:      item.CoverUrl,
+			FavoriteCount: item.FavoriteCount,
+			CommentCount:  item.CommentCount,
+			IsFavorite:    item.IsFavorite,
+			Title:         item.Title,
+		}
+		favoritelist = append(favoritelist, video)
+	}
+	return favoritelist, err
 }
