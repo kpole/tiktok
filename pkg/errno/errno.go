@@ -22,6 +22,9 @@ const (
 
 	MessageAddFailedErrCode       = 10011
 	FriendListNoPremissionErrCode = 10012
+
+	VideoIsNotExistErrCode   = 10013
+	CommentIsNotExistErrCode = 10014
 )
 
 const (
@@ -32,6 +35,8 @@ const (
 
 	MessageAddFailedErrMsg    = "message add failed"
 	FriendListNoPremissionMsg = "You can't query his friend list"
+	VideoIsNotExistErrMsg     = "video is not exist"
+	CommentIsNotExistErrMsg   = "comment is not exist"
 )
 
 type ErrNo struct {
@@ -68,6 +73,8 @@ var (
 
 	MessageAddFailedErr       = NewErrNo(MessageAddFailedErrCode, MessageAddFailedErrMsg)
 	FriendListNoPremissionErr = NewErrNo(FriendListNoPremissionErrCode, FriendListNoPremissionMsg)
+	VideoIsNotExistErr        = NewErrNo(VideoIsNotExistErrCode, VideoIsNotExistErrMsg)
+	CommentIsNotExistErr      = NewErrNo(CommentIsNotExistErrCode, CommentIsNotExistErrMsg)
 )
 
 // ConvertErr convert error to Errno
