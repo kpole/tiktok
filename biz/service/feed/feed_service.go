@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -30,9 +31,9 @@ func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedRespons
 	if req.LatestTime == 0 {
 		lastTime = time.Now()
 	} else {
-		lastTime = time.Unix(req.LatestTime, 0)
+		lastTime = time.Unix(req.LatestTime/1000, 0)
 	}
-
+	fmt.Printf("LastTime: %v\n", lastTime)
 	current_user_id, exists := s.c.Get("current_user_id")
 	// 如果当前用户没有登陆，则将 current_user_id 赋值为 0
 	if !exists {
@@ -106,20 +107,29 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 
 	// 获取视频点赞数量
 	go func() {
-		// TODO: favorite_service
-		video.FavoriteCount = 0
+		err := *new(error)
+		video.FavoriteCount, err = db.GetFavoriteCount(data.ID)
+		if err != nil {
+			log.Printf("func error")
+		}
 		wg.Done()
 	}()
 
 	go func() {
-		// TODO
-		video.CommentCount = 0
+		err := *new(error)
+		video.CommentCount, err = db.GetCommentCountByVideoID(data.ID)
+		if err != nil {
+			log.Printf("func error")
+		}
 		wg.Done()
 	}()
 
 	go func() {
-		// TODO
-		video.IsFavorite = false
+		err := *new(error)
+		video.IsFavorite, err = db.QueryFavoriteExist(data.ID, userId)
+		if err != nil {
+			log.Printf("func error")
+		}
 		wg.Done()
 	}()
 
