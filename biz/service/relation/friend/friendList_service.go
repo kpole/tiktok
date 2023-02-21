@@ -49,11 +49,12 @@ func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendList
 		if isFriend {
 			user_info, err := user_service.NewUserService(s.ctx, s.c).GetUserInfo(id, user_id)
 			if err != nil {
-				log.Printf("func error")
+				log.Printf("GetFriendList -> GetUserInfo")
 			}
 			message, err := db.GetLatestMessageByIdPair(user_id, id)
+
 			if err != nil {
-				return friendList, err
+				log.Printf("GetFriendList -> GetLatestMessageByIdPair")
 			}
 			var msgType int64
 			if message == nil { // 自定义2表示双方无聊天记录

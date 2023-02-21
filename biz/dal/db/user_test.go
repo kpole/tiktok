@@ -8,7 +8,7 @@ import (
 func TestCreateUser(t *testing.T) {
 	Init()
 	u := &User{
-		UserName: "test",
+		UserName: "8",
 		Password: "123456",
 	}
 	user_id, err := CreateUser(u)
@@ -21,7 +21,7 @@ func TestCreateUser(t *testing.T) {
 
 func TestQueryUser(t *testing.T) {
 	Init()
-	user, err := QueryUser("1")
+	user, err := QueryUser("4")
 	if err != nil {
 		fmt.Println(false)
 		return

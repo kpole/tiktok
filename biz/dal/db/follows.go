@@ -1,7 +1,6 @@
 package db
 
 import (
-	relation "offer_tiktok/biz/model/social/relation"
 	redis "offer_tiktok/biz/mw/redis"
 	"offer_tiktok/pkg/constants"
 	"strconv"
@@ -10,7 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// user_id 关注了 follower_id
 // user_id 关注了 follower_id
 type Follows struct {
 	ID         int64          `json:"id"`
@@ -76,14 +74,32 @@ func DeleteFollow(follow *Follows) (bool, error) {
 }
 
 func QueryFollowExist(follow *Follows) (bool, error) {
-	err := DB.Where("user_id = ? AND follower_id = ?", follow.UserId, follow.FollowerId).Find(&follow).Error
+	// err := DB.Where("user_id = ? AND follower_id = ?", follow.UserId, follow.FollowerId).Find(&follow).Error
 
+	// if err != nil {
+	// 	return false, err
+	// }
+	// if follow.ID == 0 {
+	// 	return false, nil
+	// }
+	// return true, nil
+
+	// version2.0 add redis
+	if exist, err := redis.RdbFollowing.SIsMember(strconv.Itoa(int(follow.UserId)), follow.FollowerId).Result(); exist {
+		//fmt.Printf("在redis中获取到user_id:%d关注了user:%d的关系\n", follow.UserId, follow.FollowerId)
+		redis.RdbFollowing.Expire(strconv.Itoa(int(follow.UserId)), redis.ExpireTime)
+		return true, err
+	}
+	// 查数据库
+	err := DB.Where("user_id = ? AND follower_id = ?", follow.UserId, follow.FollowerId).Find(&follow).Error
 	if err != nil {
 		return false, err
 	}
 	if follow.ID == 0 {
 		return false, nil
 	}
+	// 异步更新redis
+	go addRelationToRedis(int(follow.UserId), int(follow.FollowerId))
 	return true, nil
 }
 
@@ -226,33 +242,4 @@ func CheckFollowRelationExist(follow *Follows) (bool, error) {
 func addRelationToRedis(user_id int, follow_id int) {
 	redis.RdbFollowing.SAdd(strconv.Itoa(user_id), follow_id)
 	redis.RdbFollowing.Expire(strconv.Itoa(user_id), redis.ExpireTime)
-}
-
-// 返回用户关注者的User信息, 传入当前用户的id是为了判断isfollow字段
-func GetFollowInfo(current_user_id int64, user_id int64) ([]relation.User, error) {
-	var following []Follows
-	err := DB.Where("user_id = ?", user_id).Find(&following).Error
-	if err != nil {
-		return nil, err
-	}
-	var result []relation.User
-	//去user表获取关注用户的信息
-	for _, follow_id := range following {
-		follow_info, err := QueryUserById(follow_id.FollowerId)
-		if err != nil {
-			return result, err
-		}
-		FollowCount, err := GetFollowCount(follow_info.ID)
-		FolloweeCount, err := GetFolloweeCount(follow_info.ID)
-		IsFollow, err := CheckFollowRelationExist(&Follows{UserId: current_user_id, FollowerId: follow_id.FollowerId})
-		resp := &relation.User{
-			Id:            follow_info.ID,
-			Name:          follow_info.UserName,
-			FollowCount:   FollowCount,
-			FollowerCount: FolloweeCount,
-			IsFollow:      IsFollow,
-		}
-		result = append(result, *resp)
-	}
-	return result, nil
 }

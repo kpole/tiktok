@@ -91,6 +91,14 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 	} else {
 		IsFollow = false
 	}
+	FavoriteCount, err := db.GetFavoriteCountByUserID(query_user_id)
+	if err != nil {
+		return u, err
+	}
+	TotalFavorited, err := db.QueryTotalFavoritedByAuthorID(query_user_id)
+	if err != nil {
+		return u, err
+	}
 
 	u = &user.User{
 		Id:              query_user_id,
@@ -101,9 +109,9 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 		Avatar:          utils.URLconvert(s.ctx, s.c, dbUser.Avatar),
 		BackgroundImage: utils.URLconvert(s.ctx, s.c, dbUser.BackgroundImage),
 		Signature:       dbUser.Signature,
-		TotalFavorited:  0,
+		TotalFavorited:  TotalFavorited,
 		WorkCount:       WorkCount,
-		FavoriteCount:   0,
+		FavoriteCount:   FavoriteCount,
 	}
 	return u, nil
 }
