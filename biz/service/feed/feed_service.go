@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -30,9 +31,9 @@ func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedRespons
 	if req.LatestTime == 0 {
 		lastTime = time.Now()
 	} else {
-		lastTime = time.Unix(req.LatestTime, 0)
+		lastTime = time.Unix(req.LatestTime / 1000, 0)
 	}
-
+	fmt.Printf("LastTime: %v\n", lastTime)
 	current_user_id, exists := s.c.Get("current_user_id")
 	// 如果当前用户没有登陆，则将 current_user_id 赋值为 0
 	if !exists {

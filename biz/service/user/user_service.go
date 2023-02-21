@@ -99,6 +99,7 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 	if err != nil {
 		return u, err
 	}
+
 	u = &user.User{
 		Id:              query_user_id,
 		Name:            dbUser.UserName,
