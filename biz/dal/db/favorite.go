@@ -39,7 +39,7 @@ func DeleteFavorite(favorite *Favorites) (bool, error) {
 
 func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
 	var sum int64
-	err := DB.Where("video_id = ? AND user_id = ?", video_id, user_id).Count(&sum).Error
+	err := DB.Model(&Favorites{}).Where("video_id = ? AND user_id = ?", video_id, user_id).Count(&sum).Error
 
 	if err != nil {
 		return false, err
@@ -52,7 +52,7 @@ func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
 
 func QueryTotalFavoritedByAuthorID(author_id int64) (int64, error) {
 	var sum int64
-	err := DB.Joins("JOIN likes ON likes.video_id = videos.id").
+	err := DB.Table("likes").Joins("JOIN videos ON likes.video_id = videos.id").
 		Where("videos.author_id = ?", author_id).Count(&sum).Error
 	if err != nil {
 		return 0, err
@@ -87,7 +87,7 @@ func GetFavoriteIdList(user_id int64) ([]int64, error) {
 // 获得 user点赞的视频视频数量
 func GetFavoriteCountByUserID(user_id int64) (int64, error) {
 	var count int64
-	err := DB.Where("user_id = ?", user_id).Count(&count).Error
+	err := DB.Model(&Favorites{}).Where("user_id = ?", user_id).Count(&count).Error
 	if err != nil {
 		return 0, err
 	}
