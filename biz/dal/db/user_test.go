@@ -62,3 +62,13 @@ func TestVerifyUser2(t *testing.T) {
 	}
 	fmt.Println(user_id)
 }
+
+func TestQueryUserById(t *testing.T) {
+	Init()
+	u, err := QueryUserById(int64(1001))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(u)
+}

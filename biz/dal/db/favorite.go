@@ -52,7 +52,7 @@ func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
 
 func QueryTotalFavoritedByAuthorID(author_id int64) (int64, error) {
 	var sum int64
-	err := DB.Joins("JOIN likes ON likes.video_id = videos.id").
+	err := DB.Table("likes").Joins("JOIN videos ON likes.video_id = videos.id").
 		Where("videos.author_id = ?", author_id).Count(&sum).Error
 	if err != nil {
 		return 0, err
