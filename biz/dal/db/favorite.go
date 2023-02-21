@@ -1,7 +1,6 @@
 package db
 
 import (
-	favorite "offer_tiktok/biz/model/interact/favorite"
 	//relation "offer_tiktok/biz/model/social/relation"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/errno"
@@ -38,16 +37,27 @@ func DeleteFavorite(favorite *Favorites) (bool, error) {
 	return true, nil
 }
 
-func QueryFavoriteExist(favorite *Favorites) (bool, error) {
-	err := DB.Where("video_id = ? AND user_id = ?", favorite.VideoId, favorite.UserId).Find(&favorite).Error
+func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
+	var sum int64
+	err := DB.Where("video_id = ? AND user_id = ?", video_id, user_id).Count(&sum).Error
 
 	if err != nil {
 		return false, err
 	}
-	if favorite.ID == 0 {
+	if sum == 0 {
 		return false, nil
 	}
 	return true, nil
+}
+
+func QueryTotalFavoritedByAuthorID(author_id int64) (int64, error) {
+	var sum int64
+	err := DB.Joins("JOIN likes ON likes.video_id = videos.id").
+		Where("videos.author_id = ?", author_id).Count(&sum).Error
+	if err != nil {
+		return 0, err
+	}
+	return sum, nil
 }
 
 // 查询视频的点赞数量
@@ -74,6 +84,16 @@ func GetFavoriteIdList(user_id int64) ([]int64, error) {
 	return result, nil
 }
 
+// 获得 user点赞的视频视频数量
+func GetFavoriteCountByUserID(user_id int64) (int64, error) {
+	var count int64
+	err := DB.Where("user_id = ?", user_id).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 // 获得 video_id 所有点赞的人的 id
 func GetFavoriterIdList(video_id int64) ([]int64, error) {
 	var favorite_actions []Favorites
@@ -88,8 +108,6 @@ func GetFavoriterIdList(video_id int64) ([]int64, error) {
 	return result, nil
 }
 
-//-----------------------Add By ----------------------------//
-
 func CheckFavoriteRelationExist(favorite *Favorites) (bool, error) {
 	err := DB.Where("video_id = ? AND user_id = ?", favorite.VideoId, favorite.UserId).Find(&favorite).Error
 	if err != nil {
@@ -102,35 +120,3 @@ func CheckFavoriteRelationExist(favorite *Favorites) (bool, error) {
 	}
 	return true, nil
 }
-
-// // 返回用户点赞的视频的Video信息
-func GetFavoriteInfo(current_user_id int64, user_id int64) ([]favorite.Video, error) {
-	var favoriteing []Favorites
-	err := DB.Where("user_id = ?", user_id).Find(&favoriteing).Error
-	if err != nil {
-		return nil, err
-	}
-	var result []favorite.Video
-
-	// for _,favorite_id := range favoriteing {
-	// 	video_id=favorite_id
-	// 	follow_info, err := QueryUserById(follow_id.FollowerId)
-	// 	if err != nil {
-	// 		return result, err
-	// 	}
-	// 	FollowCount, err := GetFollowCount(follow_info.ID)
-	// 	FolloweeCount, err := GetFolloweeCount(follow_info.ID)
-	// 	IsFollow, err := CheckFollowRelationExist(&Follows{UserId: current_user_id, FollowerId: follow_id.FollowerId})
-	// 	resp := &favorite.Video{
-	// 		Id:            favorite_info.,
-	// 		Name:          follow_info.UserName,
-	// 		FollowCount:   FollowCount,
-	// 		FollowerCount: FolloweeCount,
-	// 		IsFollow:      IsFollow,
-	// 	}
-	// 	result = append(result, *resp)
-	// }
-	return result, nil
-}
-
-//------------------------------------------end---------------------------------//
