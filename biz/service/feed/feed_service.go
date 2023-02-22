@@ -96,7 +96,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 			IsFollow:        author.IsFollow,
 			Avatar:          author.Avatar,
 			BackgroundImage: author.BackgroundImage,
-			Signature:       author.BackgroundImage,
+			Signature:       author.Signature,
 			TotalFavorited:  author.TotalFavorited,
 			WorkCount:       author.WorkCount,
 			FavoriteCount:   author.FavoriteCount,
