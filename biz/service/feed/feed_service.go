@@ -86,7 +86,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 	go func() {
 		author, err := user_service.NewUserService(s.ctx, s.c).GetUserInfo(data.AuthorID, userId)
 		if err != nil {
-			log.Printf("func error")
+			log.Printf("GetUserInfo func error:" + err.Error())
 		}
 		video.Author = &feed.User{
 			Id:              author.Id,
@@ -110,7 +110,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 		err := *new(error)
 		video.FavoriteCount, err = db.GetFavoriteCount(data.ID)
 		if err != nil {
-			log.Printf("func error")
+			log.Printf("GetFavoriteCount func error:" + err.Error())
 		}
 		wg.Done()
 	}()
@@ -119,7 +119,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 		err := *new(error)
 		video.CommentCount, err = db.GetCommentCountByVideoID(data.ID)
 		if err != nil {
-			log.Printf("func error")
+			log.Printf("GetCommentCountByVideoID func error:" + err.Error())
 		}
 		wg.Done()
 	}()
@@ -128,7 +128,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 		err := *new(error)
 		video.IsFavorite, err = db.QueryFavoriteExist(data.ID, userId)
 		if err != nil {
-			log.Printf("func error")
+			log.Printf("QueryFavoriteExist func error:" + err.Error())
 		}
 		wg.Done()
 	}()
