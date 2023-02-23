@@ -40,7 +40,7 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	_, err = db.CreateVideo(&db.Video{
 		AuthorID:    user_id,
 		PlayURL:     constants.MinioVideoBucketName + "/" + req.Data.Filename,
-		CoverURL:    constants.MinioVideoBucketName + "/" + filename + ".png",
+		CoverURL:    constants.MinioImgBucketName + "/" + filename + ".png",
 		PublishTime: nowTime,
 		Title:       title,
 	})
