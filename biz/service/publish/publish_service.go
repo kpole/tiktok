@@ -37,17 +37,16 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	req.Data.Filename = filename + path.Ext(req.Data.Filename)
 	uploadinfo, err := minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
 	hlog.CtxInfof(s.ctx, "video upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
-	//videoURL, err := minio.GetObjURL(s.ctx, constants.MinioVideoBucketName, req.Data.Filename)
-	buf, err := ffmpeg.GetSnapshot(utils.URLconvert(s.ctx, s.c, constants.MinioVideoBucketName+"/"+req.Data.Filename))
+	PlayURL := constants.MinioVideoBucketName + "/" + req.Data.Filename
+	buf, err := ffmpeg.GetSnapshot(utils.URLconvert(s.ctx, s.c, PlayURL))
 	uploadinfo, err = minio.PutToBucketByBuf(s.ctx, constants.MinioImgBucketName, filename+".png", buf)
 	hlog.CtxInfof(s.ctx, "image upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
-	//err = os.Remove(filePath)
 	if err != nil {
 		hlog.CtxInfof(s.ctx, "err:"+err.Error())
 	}
 	_, err = db.CreateVideo(&db.Video{
 		AuthorID:    user_id,
-		PlayURL:     constants.MinioVideoBucketName + "/" + req.Data.Filename,
+		PlayURL:     PlayURL,
 		CoverURL:    constants.MinioImgBucketName + "/" + filename + ".png",
 		PublishTime: nowTime,
 		Title:       title,
