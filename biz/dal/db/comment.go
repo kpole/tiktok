@@ -61,6 +61,9 @@ func CheckCommentExist(comment_id int64) (bool, error) {
 
 func GetCommentListByVideoID(video_id int64) ([]*Comment, error) {
 	var comment_list []*Comment
+	if ok, _ := CheckVideoExistById(video_id); !ok {
+		return comment_list, errno.VideoIsNotExistErr
+	}
 	err := DB.Table(constants.CommentTableName).Where("video_id = ?", video_id).Find(&comment_list).Error
 	if err != nil {
 		return comment_list, err
