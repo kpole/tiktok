@@ -3,10 +3,12 @@ package service
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/feed"
 	"offer_tiktok/biz/model/basic/publish"
 	feed_service "offer_tiktok/biz/service/feed"
+	"strconv"
 
 	"offer_tiktok/biz/mw/ffmpeg"
 	"offer_tiktok/biz/mw/minio"
@@ -33,13 +35,18 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	nowTime := time.Now()
 	filename := utils.NewFileName(user_id, nowTime.Unix())
 	req.Data.Filename = filename + path.Ext(req.Data.Filename)
-	_, err = minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
-	videoURL, err := minio.GetObjURL(s.ctx, constants.MinioVideoBucketName, req.Data.Filename)
-	buf, err := ffmpeg.GetSnapshot(videoURL.String())
-	_, err = minio.PutToBucketByBuf(s.ctx, constants.MinioImgBucketName, filename+".png", buf)
+	uploadinfo, err := minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
+	hlog.CtxInfof(s.ctx, "video upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
+	PlayURL := constants.MinioVideoBucketName + "/" + req.Data.Filename
+	buf, err := ffmpeg.GetSnapshot(utils.URLconvert(s.ctx, s.c, PlayURL))
+	uploadinfo, err = minio.PutToBucketByBuf(s.ctx, constants.MinioImgBucketName, filename+".png", buf)
+	hlog.CtxInfof(s.ctx, "image upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
+	if err != nil {
+		hlog.CtxInfof(s.ctx, "err:"+err.Error())
+	}
 	_, err = db.CreateVideo(&db.Video{
 		AuthorID:    user_id,
-		PlayURL:     constants.MinioVideoBucketName + "/" + req.Data.Filename,
+		PlayURL:     PlayURL,
 		CoverURL:    constants.MinioImgBucketName + "/" + filename + ".png",
 		PublishTime: nowTime,
 		Title:       title,
