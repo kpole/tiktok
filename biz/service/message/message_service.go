@@ -24,7 +24,7 @@ func (m *MessageService) GetMessageChat(req *message.DouyinMessageChatRequest) (
 	from_user_id, _ := m.c.Get("current_user_id")
 	to_user_id := req.ToUserId
 	pre_msg_time := req.PreMsgTime
-	db_messages, err := db.GetMessageByIdPair(from_user_id.(int64), to_user_id, utils.SecondTimeStampToTime(pre_msg_time))
+	db_messages, err := db.GetMessageByIdPair(from_user_id.(int64), to_user_id, utils.MillTimeStampToTime(pre_msg_time))
 	if err != nil {
 		return messages, err
 	}
@@ -34,7 +34,7 @@ func (m *MessageService) GetMessageChat(req *message.DouyinMessageChatRequest) (
 			ToUserId:   db_message.ToUserId,
 			FromUserId: db_message.FromUserId,
 			Content:    db_message.Content,
-			CreateTime: db_message.CreatedAt.Format("2006-01-02 15:04:05"),
+			CreateTime: db_message.CreatedAt.UnixNano() / 1000000,
 		})
 	}
 	return messages, nil
