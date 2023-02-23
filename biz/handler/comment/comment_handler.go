@@ -9,11 +9,6 @@ import (
 	comment_service "offer_tiktok/biz/service/comment"
 	"offer_tiktok/pkg/errno"
 
-	comment "offer_tiktok/biz/model/interact/comment"
-	"offer_tiktok/biz/pack"
-	comment_service "offer_tiktok/biz/service/comment"
-	"offer_tiktok/pkg/errno"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
