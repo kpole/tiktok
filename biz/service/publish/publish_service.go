@@ -8,7 +8,6 @@ import (
 	"offer_tiktok/biz/model/basic/feed"
 	"offer_tiktok/biz/model/basic/publish"
 	feed_service "offer_tiktok/biz/service/feed"
-	"os"
 	"strconv"
 
 	"offer_tiktok/biz/mw/ffmpeg"
@@ -38,11 +37,11 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	req.Data.Filename = filename + path.Ext(req.Data.Filename)
 	uploadinfo, err := minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
 	hlog.CtxInfof(s.ctx, "video upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
-	videoURL, err := minio.GetObjURL(s.ctx, constants.MinioVideoBucketName, req.Data.Filename)
-	filePath, err := ffmpeg.GetSnapshot(videoURL.String(), filename+".png")
-	uploadinfo, err = minio.PutToBucketByFilePath(s.ctx, constants.MinioImgBucketName, filename+".png", filePath)
-	hlog.CtxInfof(s.ctx, "image buket upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
-	err = os.Remove(filePath)
+	//videoURL, err := minio.GetObjURL(s.ctx, constants.MinioVideoBucketName, req.Data.Filename)
+	buf, err := ffmpeg.GetSnapshot(utils.URLconvert(s.ctx, s.c, constants.MinioVideoBucketName+"/"+req.Data.Filename))
+	uploadinfo, err = minio.PutToBucketByBuf(s.ctx, constants.MinioImgBucketName, filename+".png", buf)
+	hlog.CtxInfof(s.ctx, "image upload size:"+strconv.FormatInt(uploadinfo.Size, 10))
+	//err = os.Remove(filePath)
 	if err != nil {
 		hlog.CtxInfof(s.ctx, "err:"+err.Error())
 	}
