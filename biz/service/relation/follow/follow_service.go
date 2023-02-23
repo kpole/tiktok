@@ -79,8 +79,11 @@ func (r *RelationService) GetFollowList(req *relation.DouyinRelationFollowListRe
 
 	var followList []relation.User
 	// 获取current_user_id
-	current_user_id, _ := r.c.Get("current_user_id")
-	dbfollows, err := db.GetFollowIdList(current_user_id.(int64))
+	current_user_id, exists := r.c.Get("current_user_id")
+	if !exists {
+		current_user_id = int64(0)
+	}
+	dbfollows, err := db.GetFollowIdList(req.UserId)
 	if err != nil {
 		return followList, err
 	}
