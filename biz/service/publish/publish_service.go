@@ -37,7 +37,7 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	_, err = minio.PutToBucket(s.ctx, constants.MinioVideoBucketName, req.Data)
 	videoURL, err := minio.GetObjURL(s.ctx, constants.MinioVideoBucketName, req.Data.Filename)
 	buf, err := ffmpeg.GetSnapshot(videoURL.String())
-	hlog.CtxInfof(s.ctx, "err:"+err.Error())
+	hlog.CtxInfof(s.ctx, "buf:"+string(buf.Len()))
 	_, err = minio.PutToBucketByBuf(s.ctx, constants.MinioImgBucketName, filename+".png", buf)
 	_, err = db.CreateVideo(&db.Video{
 		AuthorID:    user_id,
