@@ -8,12 +8,13 @@ package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
 	"log"
 	"offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/interact/comment"
 	user_service "offer_tiktok/biz/service/user"
 	"offer_tiktok/pkg/errno"
+
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 type CommentService struct {
@@ -82,7 +83,8 @@ func (c *CommentService) getUserInfoById(current_user_id int64, user_id int64) (
 	return comment_user, nil
 }
 
-func (c *CommentService) CommentList(req *comment.DouyinCommentListRequest) (resp *comment.DouyinCommentListResponse, err error) {
+func (c *CommentService) CommentList(req *comment.DouyinCommentListRequest) (*comment.DouyinCommentListResponse, error) {
+	resp := &comment.DouyinCommentListResponse{}
 	video_id := req.VideoId
 
 	// 获取current_user_id
@@ -101,9 +103,9 @@ func (c *CommentService) CommentList(req *comment.DouyinCommentListRequest) (res
 	return resp, nil
 }
 
-func (c *CommentService) copyComment(result *[]*comment.Comment, data *[]db.Comment, current_user_id int64) error {
+func (c *CommentService) copyComment(result *[]*comment.Comment, data *[]*db.Comment, current_user_id int64) error {
 	for _, item := range *data {
-		comment := c.createComment(&item, current_user_id)
+		comment := c.createComment(item, current_user_id)
 		*result = append(*result, comment)
 	}
 	return nil

@@ -59,9 +59,9 @@ func CheckCommentExist(comment_id int64) (bool, error) {
 	return true, nil
 }
 
-func GetCommentListByVideoID(video_id int64) ([]Comment, error) {
-	var comment_list []Comment
-	err := DB.Where("video_id = ?", video_id).Find(comment_list).Error
+func GetCommentListByVideoID(video_id int64) ([]*Comment, error) {
+	var comment_list []*Comment
+	err := DB.Table(constants.CommentTableName).Where("video_id = ?", video_id).Find(&comment_list).Error
 	if err != nil {
 		return comment_list, err
 	}
@@ -70,7 +70,7 @@ func GetCommentListByVideoID(video_id int64) ([]Comment, error) {
 
 func GetCommentCountByVideoID(video_id int64) (int64, error) {
 	var sum int64
-	err := DB.Where("video_id = ?", video_id).Count(&sum).Error
+	err := DB.Model(&Comment{}).Where("video_id = ?", video_id).Count(&sum).Error
 	if err != nil {
 		return sum, err
 	}

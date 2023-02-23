@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app"
 	"offer_tiktok/biz/dal/db"
 	relation "offer_tiktok/biz/model/social/relation"
-	"offer_tiktok/pkg/errno"
-	"github.com/cloudwego/hertz/pkg/app"
 	user_service "offer_tiktok/biz/service/user"
+	"offer_tiktok/pkg/errno"
 )
 
 const (
@@ -79,8 +79,11 @@ func (r *RelationService) GetFollowList(req *relation.DouyinRelationFollowListRe
 
 	var followList []relation.User
 	// 获取current_user_id
-	current_user_id, _ := r.c.Get("current_user_id")
-	dbfollows, err := db.GetFollowIdList(current_user_id.(int64))
+	current_user_id, exists := r.c.Get("current_user_id")
+	if !exists {
+		current_user_id = int64(0)
+	}
+	dbfollows, err := db.GetFollowIdList(req.UserId)
 	if err != nil {
 		return followList, err
 	}
