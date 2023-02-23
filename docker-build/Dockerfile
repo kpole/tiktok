@@ -12,3 +12,4 @@ RUN rm /mw/ffmpeg.tar.gz
 COPY offer_tiktok /app/app
 RUN chmod +x /app/app
 ENTRYPOINT ["./app"]
+

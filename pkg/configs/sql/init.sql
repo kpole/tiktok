@@ -43,7 +43,7 @@ CREATE TABLE `follows` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '关注关系创建时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '关注关系删除时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `userIdToFollowerIdIdx` (`user_id`,`follower_id`) USING BTREE,
+  KEY `userIdToFollowerIdIdx` (`user_id`,`follower_id`) USING BTREE,
   KEY `FollowerIdIdx` (`follower_id`) USING BTREE,
   KEY `userIdIdx` (`user_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='关注表';
@@ -59,7 +59,7 @@ CREATE TABLE `likes` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '点赞创建时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '点赞删除时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `userIdtoVideoIdIdx` (`user_id`,`video_id`) USING BTREE,
+  KEY `userIdtoVideoIdIdx` (`user_id`,`video_id`) USING BTREE,
   KEY `userIdIdx` (`user_id`) USING BTREE,
   KEY `videoIdx` (`video_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='点赞表';
