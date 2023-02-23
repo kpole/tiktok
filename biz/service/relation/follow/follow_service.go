@@ -4,9 +4,10 @@ import (
 	"context"
 	"offer_tiktok/biz/dal/db"
 	relation "offer_tiktok/biz/model/social/relation"
-	"offer_tiktok/pkg/errno"
-	"github.com/cloudwego/hertz/pkg/app"
 	user_service "offer_tiktok/biz/service/user"
+	"offer_tiktok/pkg/errno"
+
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 const (
@@ -101,7 +102,7 @@ func (r *RelationService) GetFollowList(req *relation.DouyinRelationFollowListRe
 			IsFollow:        user_info.IsFollow,
 			Avatar:          user_info.Avatar,
 			BackgroundImage: user_info.BackgroundImage,
-			Signature:       user_info.BackgroundImage,
+			Signature:       user_info.Signature,
 			TotalFavorited:  user_info.TotalFavorited,
 			WorkCount:       user_info.WorkCount,
 			FavoriteCount:   user_info.FavoriteCount,
