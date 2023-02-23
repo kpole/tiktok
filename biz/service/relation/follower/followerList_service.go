@@ -37,7 +37,7 @@ func (s *FollowerListService) GetFollowerList(req *relation.DouyinRelationFollow
 	for _, follower := range dbfollowers {
 		user_info, err := user_service.NewUserService(s.ctx, s.c).GetUserInfo(follower, current_user_id.(int64))
 		if err != nil {
-			log.Printf("func error")
+			log.Printf("func error: GetFollowerList -> GetUserInfo")
 		}
 
 		user := &relation.User{
@@ -48,7 +48,7 @@ func (s *FollowerListService) GetFollowerList(req *relation.DouyinRelationFollow
 			IsFollow:        user_info.IsFollow,
 			Avatar:          user_info.Avatar,
 			BackgroundImage: user_info.BackgroundImage,
-			Signature:       user_info.BackgroundImage,
+			Signature:       user_info.Signature,
 			TotalFavorited:  user_info.TotalFavorited,
 			WorkCount:       user_info.WorkCount,
 			FavoriteCount:   user_info.FavoriteCount,

@@ -49,12 +49,12 @@ func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendList
 		if isFriend {
 			user_info, err := user_service.NewUserService(s.ctx, s.c).GetUserInfo(id, user_id)
 			if err != nil {
-				log.Printf("func error")
+				log.Printf("func error: GetFriendList -> GetUserInfo")
 			}
 			message, err := db.GetLatestMessageByIdPair(user_id, id)
 
 			if err != nil {
-				log.Printf("func error")
+				log.Printf("func error: GetFriendList -> GetLatestMessageByIdPair")
 			}
 			var msgType int64
 			if message == nil { // 自定义2表示双方无聊天记录
@@ -66,23 +66,19 @@ func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendList
 				msgType = 0
 			}
 			friendList = append(friendList, &relation.FriendUser{
-				Friend: &relation.User{
-					Id:              user_info.Id,
-					Name:            user_info.Name,
-					FollowCount:     user_info.FollowCount,
-					FollowerCount:   user_info.FollowerCount,
-					IsFollow:        user_info.IsFollow,
-					Avatar:          user_info.Avatar,
-					BackgroundImage: user_info.BackgroundImage,
-					Signature:       user_info.BackgroundImage,
-					TotalFavorited:  user_info.TotalFavorited,
-					WorkCount:       user_info.WorkCount,
-					FavoriteCount:   user_info.FavoriteCount,
-					// 因为相互关注的两个人互为好友，所以在已经是好友的情况下，必定关注了他
-				},
-				// 这两个字段的获得可能得有其它同学的聊天记录消息接口
-				Message: message.Content,
-				MsgType: msgType,
+				Id:              user_info.Id,
+				Name:            user_info.Name,
+				FollowCount:     user_info.FollowCount,
+				FollowerCount:   user_info.FollowerCount,
+				IsFollow:        user_info.IsFollow,
+				Avatar:          user_info.Avatar,
+				BackgroundImage: user_info.BackgroundImage,
+				Signature:       user_info.Signature,
+				TotalFavorited:  user_info.TotalFavorited,
+				WorkCount:       user_info.WorkCount,
+				FavoriteCount:   user_info.FavoriteCount,
+				Message:         message.Content,
+				MsgType:         msgType,
 			})
 		}
 	}
