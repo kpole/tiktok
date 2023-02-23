@@ -1,17 +1,17 @@
 package ffmpeg
 
-
 import (
-	"bytes"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
+	"os"
 )
 
-func GetSnapshot(videoPath string) (buf *bytes.Buffer, err error) {
-	buf = bytes.NewBuffer(nil)
+func GetSnapshot(videoPath string, imageName string) (imagePath string, err error) {
 	err = ffmpeg.Input(videoPath).
-		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
-		WithOutput(buf).
+		Output(imageName, ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
 		Run()
-
-	return buf, nil
+	if err != nil {
+		return "", err
+	}
+	pwd, err := os.Getwd()
+	return pwd + "/" + imageName, nil
 }
