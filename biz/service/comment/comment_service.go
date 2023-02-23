@@ -90,7 +90,9 @@ func (c *CommentService) CommentList(req *comment.DouyinCommentListRequest) (*co
 	current_user_id, _ := c.c.Get("current_user_id")
 
 	dbcomments, err := db.GetCommentListByVideoID(video_id)
-
+	if err != nil {
+		return resp, err
+	}
 	var comments []*comment.Comment
 	err = c.copyComment(&comments, &dbcomments, current_user_id.(int64))
 	if err != nil {
