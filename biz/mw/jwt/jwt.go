@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/jwt"
 	db "offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/user"
@@ -58,7 +59,7 @@ func Init() {
 			return false
 		},
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
-			c.JSON(code, user.DouyinUserLoginResponse{
+			c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
 				StatusCode: errno.AuthorizationFailedErrCode,
 				StatusMsg:  message,
 			})
