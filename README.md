@@ -3,6 +3,7 @@
 ### How to run
 
 #### 1. Local environment
+
 [Download ffmpeg package](https://ffmpeg.org/download.html) && **add ffmpeg to system path or user path**
 ```shell
 docker-compose up

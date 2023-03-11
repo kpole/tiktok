@@ -11,7 +11,6 @@ import (
 	"offer_tiktok/pkg/errno"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
@@ -21,7 +20,6 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.DouyinUserRegisterRequest
 	err = c.BindAndValidate(&req)
-	hlog.CtxInfof(ctx, "OK")
 	if err != nil {
 		resp := pack.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{

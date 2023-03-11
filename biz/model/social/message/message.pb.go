@@ -89,7 +89,7 @@ type DouyinMessageChatResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode  int32      `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code" form:"status_code" query:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusCode  int32      `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,required" form:"status_code" query:"status_code"` // 状态码，0-成功，其他值-失败
 	StatusMsg   string     `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg" form:"status_msg" query:"status_msg"`       // 返回状态描述
 	MessageList []*Message `protobuf:"bytes,3,rep,name=message_list,json=messageList,proto3" json:"message_list" form:"message_list" query:"message_list"`       // 消息列表
 }
@@ -156,7 +156,7 @@ type Message struct {
 	ToUserId   int64  `protobuf:"varint,2,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty" form:"to_user_id" query:"to_user_id"`           // 该消息接收者的id
 	FromUserId int64  `protobuf:"varint,3,opt,name=from_user_id,json=fromUserId,proto3" json:"from_user_id,omitempty" form:"from_user_id" query:"from_user_id"` // 该消息发送者的id
 	Content    string `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty" form:"content" query:"content"`                                      // 消息内容
-	CreateTime string `protobuf:"bytes,5,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty" form:"create_time" query:"create_time"`      // 消息创建时间
+	CreateTime int64  `protobuf:"varint,5,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty" form:"create_time" query:"create_time"`     // 消息创建时间
 }
 
 func (x *Message) Reset() {
@@ -219,11 +219,11 @@ func (x *Message) GetContent() string {
 	return ""
 }
 
-func (x *Message) GetCreateTime() string {
+func (x *Message) GetCreateTime() int64 {
 	if x != nil {
 		return x.CreateTime
 	}
-	return ""
+	return 0
 }
 
 type DouyinMessageActionRequest struct {
@@ -302,7 +302,7 @@ type DouyinMessageActionResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code" form:"status_code" query:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,required" form:"status_code" query:"status_code"` // 状态码，0-成功，其他值-失败
 	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg" form:"status_msg" query:"status_msg"`       // 返回状态描述
 }
 
@@ -382,7 +382,7 @@ var file_message_proto_rawDesc = []byte{
 	0x65, 0x72, 0x49, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18,
 	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x1f,
 	0x0a, 0x0b, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x22,
+	0x01, 0x28, 0x03, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x22,
 	0x8b, 0x01, 0x0a, 0x1a, 0x44, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14,
 	0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74,

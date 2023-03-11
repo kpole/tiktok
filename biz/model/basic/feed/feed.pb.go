@@ -81,7 +81,7 @@ type DouyinFeedResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code" form:"status_code" query:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,required" form:"status_code" query:"status_code"` // 状态码，0-成功，其他值-失败
 	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg" form:"status_msg" query:"status_msg"`       // 返回状态描述
 	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list" form:"video_list" query:"video_list"`                 // 视频列表
 	NextTime   int64    `protobuf:"varint,4,opt,name=next_time,json=nextTime,proto3" json:"next_time" form:"next_time" query:"next_time"`           // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
