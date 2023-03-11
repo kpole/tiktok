@@ -28,13 +28,16 @@ func Init() {
 			if err := c.BindAndValidate(&loginRequest); err != nil {
 				return nil, err
 			}
-			password, err := utils.MD5(loginRequest.Password)
-			user_id, err := db.VerifyUser(loginRequest.Username, password)
+			user, err := db.QueryUser(loginRequest.Username)
+			if ok := utils.VerifyPassword(loginRequest.Password, user.Password); !ok {
+				err = errno.PasswordIsNotVerified
+				return nil, err
+			}
 			if err != nil {
 				return nil, err
 			}
-			c.Set("user_id", user_id)
-			return user_id, nil
+			c.Set("user_id", user.ID)
+			return user.ID, nil
 		},
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(int64); ok {

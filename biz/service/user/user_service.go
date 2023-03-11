@@ -31,7 +31,7 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 		return 0, errno.UserAlreadyExistErr
 	}
 
-	passWord, err := utils.MD5(req.Password)
+	passWord, err := utils.Crypt(req.Password)
 	user_id, err = db.CreateUser(&db.User{
 		UserName:        req.Username,
 		Password:        passWord,

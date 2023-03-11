@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Author: kpole
- * @Date: 2023-02-20 21:30:04
- * @LastEditors: kpole
- */
 package service
 
 import (
