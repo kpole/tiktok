@@ -1,7 +1,6 @@
 package db
 
 import (
-	//relation "offer_tiktok/biz/model/social/relation"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/errno"
 	"time"
@@ -17,7 +16,7 @@ type Favorites struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"delete_at"`
 }
 
-func (f *Favorites) TableName() string {
+func (Favorites) TableName() string {
 	return constants.FavoritesTableName
 }
 
@@ -52,7 +51,7 @@ func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
 
 func QueryTotalFavoritedByAuthorID(author_id int64) (int64, error) {
 	var sum int64
-	err := DB.Table("likes").Joins("JOIN videos ON likes.video_id = videos.id").
+	err := DB.Table(constants.FavoritesTableName).Joins("JOIN videos ON likes.video_id = videos.id").
 		Where("videos.author_id = ?", author_id).Count(&sum).Error
 	if err != nil {
 		return 0, err

@@ -14,7 +14,7 @@ type Messages struct {
 	CreatedAt  time.Time `json:"created_at"`
 }
 
-func (m *Messages) TableName() string {
+func (Messages) TableName() string {
 	return constants.MessageTableName
 }
 

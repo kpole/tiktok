@@ -2,9 +2,6 @@ package service
 
 import (
 	"context"
-	"crypto/md5"
-	"fmt"
-	"io"
 	"offer_tiktok/biz/dal/db"
 	user "offer_tiktok/biz/model/basic/user"
 	"offer_tiktok/pkg/constants"
@@ -34,11 +31,7 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 		return 0, errno.UserAlreadyExistErr
 	}
 
-	h := md5.New()
-	if _, err = io.WriteString(h, req.Password); err != nil {
-		return 0, err
-	}
-	passWord := fmt.Sprintf("%x", h.Sum(nil))
+	passWord, err := utils.MD5(req.Password)
 	user_id, err = db.CreateUser(&db.User{
 		UserName:        req.Username,
 		Password:        passWord,
