@@ -6,29 +6,32 @@ import (
 )
 
 const (
-	SuccessCode                = 0
-	ServiceErrCode             = 10001
-	ParamErrCode               = 10002
-	UserAlreadyExistErrCode    = 10003
-	UserIsNotExistErrCode      = 10004
-	AuthorizationFailedErrCode = 10005
+	SuccessCode    = 0
+	ServiceErrCode = iota + 10000
+	ParamErrCode
+	AuthorizationFailedErrCode
 
-	FollowRelationAlreadyExistErrCode = 10006
-	FollowRelationNotExistErrCode     = 10007
+	UserAlreadyExistErrCode
+	UserIsNotExistErrCode
 
-	FavoriteRelationAlreadyExistErrCode = 10008
-	FavoriteRelationNotExistErrCode     = 10009
-	FavoriteActionErrCode               = 10010
+	FollowRelationAlreadyExistErrCode
+	FollowRelationNotExistErrCode
 
-	MessageAddFailedErrCode       = 10011
-	FriendListNoPremissionErrCode = 10012
+	FavoriteRelationAlreadyExistErrCode
+	FavoriteRelationNotExistErrCode
+	FavoriteActionErrCode
 
-	VideoIsNotExistErrCode   = 10013
-	CommentIsNotExistErrCode = 10014
+	MessageAddFailedErrCode
+	FriendListNoPremissionErrCode
+
+	VideoIsNotExistErrCode
+	CommentIsNotExistErrCode
 )
 
 const (
 	SuccessMsg               = "Success"
+	ServerErrMsg             = "Service is unable to start successfully"
+	ParamErrMsg              = "Wrong Parameter has been given"
 	UserIsNotExistErrMsg     = "user is not exist"
 	PasswordIsNotVerifiedMsg = "username or password not verified"
 	FavoriteActionErrMsg     = "favorite add failed"
@@ -58,9 +61,9 @@ func (e ErrNo) WithMessage(msg string) ErrNo {
 }
 
 var (
-	Success                         = NewErrNo(SuccessCode, "Success")
-	ServiceErr                      = NewErrNo(ServiceErrCode, "Service is unable to start successfully")
-	ParamErr                        = NewErrNo(ParamErrCode, "Wrong Parameter has been given")
+	Success                         = NewErrNo(SuccessCode, SuccessMsg)
+	ServiceErr                      = NewErrNo(ServiceErrCode, ServerErrMsg)
+	ParamErr                        = NewErrNo(ParamErrCode, ParamErrMsg)
 	UserAlreadyExistErr             = NewErrNo(UserAlreadyExistErrCode, "User already exists")
 	AuthorizationFailedErr          = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	UserIsNotExistErr               = NewErrNo(UserIsNotExistErrCode, UserIsNotExistErrMsg)
