@@ -14,6 +14,9 @@ const (
 	FavoriteActionType   = 1
 	UnFavoriteActionType = 2
 
+	RedisAddr     = "localhost:6379"
+	RedisPassword = ""
+
 	MinioEndPoint        = "localhost:18001"
 	MinioAccessKeyID     = "douyin"
 	MinioSecretAccessKey = "douyin123"

@@ -3,6 +3,7 @@ version: '3'
 services:
   mysql:
     image: 'mysql:latest'
+    container_name: tiktok_mysql
     volumes:
       - ../pkg/configs/sql:/docker-entrypoint-initdb.d
     ports:
@@ -16,6 +17,7 @@ services:
 
   minio:
     image: minio/minio
+    container_name: tiktok_minio
     ports:
       - 18001:9000 # api 端口
       - 18002:9001 # 控制台端口
@@ -31,7 +33,7 @@ services:
 
   redis:
     image: redis
-    container_name: redis7
+    container_name: tiktok_redis
     ports:
       - 18003:6379
     volumes:
@@ -43,6 +45,7 @@ services:
 
   tiktok:
     image: tiktok:latest
+    container_name: tiktok_main
     depends_on:
       - mysql
       - redis

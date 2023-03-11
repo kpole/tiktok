@@ -18,7 +18,7 @@ type Follows struct {
 	DeletedAt  gorm.DeletedAt `gorm:"index" json:"delete_at"`
 }
 
-func (f *Follows) TableName() string {
+func (Follows) TableName() string {
 	return constants.FollowsTableName
 }
 

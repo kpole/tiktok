@@ -17,7 +17,7 @@ type Comment struct {
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }
 
-func (c *Comment) TableName() string {
+func (Comment) TableName() string {
 	return constants.CommentTableName
 }
 
