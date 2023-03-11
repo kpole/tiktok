@@ -1,11 +1,5 @@
 FROM golang:1.18-alpine3.17 AS build
 
-#RUN mkdir "/mw"
-# ENV PATH="/mw:${PATH}"
-
-# COPY /docker-build/ffmpeg-amd64-linux.tar.gz /mw/ffmpeg.tar.gz
-# RUN tar -zxvf /mw/ffmpeg.tar.gz -C /mw/ \
-#  && rm /mw/ffmpeg.tar.gz
 COPY biz/ /go/src/biz/
 COPY pkg/ /go/src/pkg/
 COPY go.mod go.sum *.go /go/src/
