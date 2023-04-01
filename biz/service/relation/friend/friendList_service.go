@@ -3,13 +3,13 @@ package service
 import (
 	"context"
 	"log"
+	"offer_tiktok/biz/dal/db"
 	user_service "offer_tiktok/biz/service/user"
+	"offer_tiktok/pkg/errno"
 
 	"github.com/cloudwego/hertz/pkg/app"
 
-	"offer_tiktok/biz/dal/db"
 	relation "offer_tiktok/biz/model/social/relation"
-	"offer_tiktok/pkg/errno"
 )
 
 type FriendListService struct {
@@ -52,7 +52,6 @@ func (s *FriendListService) GetFriendList(req *relation.DouyinRelationFriendList
 				log.Printf("func error: GetFriendList -> GetUserInfo")
 			}
 			message, err := db.GetLatestMessageByIdPair(user_id, id)
-
 			if err != nil {
 				log.Printf("func error: GetFriendList -> GetLatestMessageByIdPair")
 			}

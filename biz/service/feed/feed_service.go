@@ -4,16 +4,18 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"offer_tiktok/biz/dal/db"
+	"offer_tiktok/biz/model/common"
+	"offer_tiktok/pkg/constants"
+	"offer_tiktok/pkg/utils"
 	"sync"
 	"time"
 
-	"offer_tiktok/biz/dal/db"
-	feed "offer_tiktok/biz/model/basic/feed"
-	user_service "offer_tiktok/biz/service/user"
-	"offer_tiktok/pkg/constants"
-	"offer_tiktok/pkg/utils"
-
 	"github.com/cloudwego/hertz/pkg/app"
+
+	feed "offer_tiktok/biz/model/basic/feed"
+
+	user_service "offer_tiktok/biz/service/user"
 )
 
 type FeedService struct {
@@ -21,10 +23,12 @@ type FeedService struct {
 	c   *app.RequestContext
 }
 
+// NewFeedService create feed service
 func NewFeedService(ctx context.Context, c *app.RequestContext) *FeedService {
 	return &FeedService{ctx: ctx, c: c}
 }
 
+// Feed get the last ten videos until the deadline
 func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedResponse, error) {
 	resp := &feed.DouyinFeedResponse{}
 	var lastTime time.Time
@@ -57,6 +61,7 @@ func (s *FeedService) Feed(req *feed.DouyinFeedRequest) (*feed.DouyinFeedRespons
 	return resp, nil
 }
 
+// CopyVideos use db.Video make feed.Video
 func (s *FeedService) CopyVideos(result *[]*feed.Video, data *[]*db.Video, userId int64) error {
 	for _, item := range *data {
 		video := s.createVideo(item, userId)
@@ -65,15 +70,11 @@ func (s *FeedService) CopyVideos(result *[]*feed.Video, data *[]*db.Video, userI
 	return nil
 }
 
-/**
- * @description: 将 db.Video 拼接成 feed.Video
- * @param {*db.Video} data
- * @param {int64} userId
- * @return {*}
- */
+// createVideo get video info by concurrent query
 func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 	video := &feed.Video{
-		Id:       data.ID,
+		Id: data.ID,
+		// convert path in the db into a complete url accessible by the front end
 		PlayUrl:  utils.URLconvert(s.ctx, s.c, data.PlayURL),
 		CoverUrl: utils.URLconvert(s.ctx, s.c, data.CoverURL),
 		Title:    data.Title,
@@ -82,13 +83,13 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 	var wg sync.WaitGroup
 	wg.Add(4)
 
-	// 获取作者信息
+	// Get author information
 	go func() {
 		author, err := user_service.NewUserService(s.ctx, s.c).GetUserInfo(data.AuthorID, userId)
 		if err != nil {
 			log.Printf("GetUserInfo func error:" + err.Error())
 		}
-		video.Author = &feed.User{
+		video.Author = &common.User{
 			Id:              author.Id,
 			Name:            author.Name,
 			FollowCount:     author.FollowCount,
@@ -105,7 +106,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 		wg.Done()
 	}()
 
-	// 获取视频点赞数量
+	// Get the number of video likes
 	go func() {
 		err := *new(error)
 		video.FavoriteCount, err = db.GetFavoriteCount(data.ID)
@@ -115,6 +116,7 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 		wg.Done()
 	}()
 
+	// Get comment count
 	go func() {
 		err := *new(error)
 		video.CommentCount, err = db.GetCommentCountByVideoID(data.ID)
@@ -124,9 +126,10 @@ func (s *FeedService) createVideo(data *db.Video, userId int64) *feed.Video {
 		wg.Done()
 	}()
 
+	// Get favorite exist
 	go func() {
 		err := *new(error)
-		video.IsFavorite, err = db.QueryFavoriteExist(data.ID, userId)
+		video.IsFavorite, err = db.QueryFavoriteExist(userId, data.ID)
 		if err != nil {
 			log.Printf("QueryFavoriteExist func error:" + err.Error())
 		}

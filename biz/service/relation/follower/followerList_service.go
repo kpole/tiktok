@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 	"log"
+	"offer_tiktok/biz/dal/db"
 	user_service "offer_tiktok/biz/service/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
 
-	"offer_tiktok/biz/dal/db"
 	relation "offer_tiktok/biz/model/social/relation"
 )
 

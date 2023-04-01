@@ -4,24 +4,25 @@ package message
 
 import (
 	"context"
-
-	message "offer_tiktok/biz/model/social/message"
-	"offer_tiktok/biz/pack"
-	message_service "offer_tiktok/biz/service/message"
 	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+
+	message "offer_tiktok/biz/model/social/message"
+	message_service "offer_tiktok/biz/service/message"
 )
 
-// MessageChat .
+// MessageChat get the chat message records of the currently logged-in user and other specified users
+//
 // @router /douyin/message/chat/ [GET]
 func MessageChat(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req message.DouyinMessageChatRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, message.DouyinMessageChatResponse{
 			StatusCode:  resp.StatusCode,
 			StatusMsg:   resp.StatusMsg,
@@ -32,7 +33,7 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 
 	messages, err := message_service.NewMessageService(ctx, c).GetMessageChat(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, message.DouyinMessageChatResponse{
 			StatusCode:  resp.StatusCode,
 			StatusMsg:   resp.StatusMsg,
@@ -48,14 +49,15 @@ func MessageChat(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// MessageAction .
+// MessageAction Logged-in user to send message
+//
 // @router /douyin/message/action/ [POST]
 func MessageAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req message.DouyinMessageActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, message.DouyinMessageActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -65,7 +67,7 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 
 	err = message_service.NewMessageService(ctx, c).MessageAction(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, message.DouyinMessageActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,

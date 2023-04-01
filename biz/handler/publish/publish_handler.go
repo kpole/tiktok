@@ -4,15 +4,18 @@ package publish
 
 import (
 	"context"
+	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+
 	publish "offer_tiktok/biz/model/basic/publish"
-	"offer_tiktok/biz/pack"
 	service "offer_tiktok/biz/service/publish"
-	"offer_tiktok/pkg/errno"
 )
 
-// PublishAction .
+// PublishAction publish a video
+//
 // @router /douyin/publish/action/ [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -20,7 +23,7 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var req publish.DouyinPublishActionRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(errno.ParamErr)
+		resp := utils.BuildBaseResp(errno.ParamErr)
 		c.JSON(consts.StatusBadRequest, publish.DouyinPublishActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -29,14 +32,15 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 	}
 	err = service.NewPublishService(ctx, c).PublishAction(&req)
 
-	resp := pack.BuildBaseResp(err)
+	resp := utils.BuildBaseResp(err)
 	c.JSON(consts.StatusOK, publish.DouyinPublishActionResponse{
 		StatusMsg:  resp.StatusMsg,
 		StatusCode: resp.StatusCode,
 	})
 }
 
-// PublishList .
+// PublishList get the video list of user
+//
 // @router /douyin/publish/list/ [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -48,9 +52,8 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp, err := service.NewPublishService(ctx, c).PublishList(&req)
-
 	if err != nil {
-		bresp := pack.BuildBaseResp(err)
+		bresp := utils.BuildBaseResp(err)
 		resp.StatusCode = bresp.StatusCode
 		resp.StatusMsg = bresp.StatusMsg
 		c.JSON(consts.StatusOK, resp)

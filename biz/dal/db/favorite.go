@@ -1,12 +1,15 @@
 package db
 
 import (
+	"offer_tiktok/biz/mw/redis"
 	"offer_tiktok/pkg/constants"
-	"offer_tiktok/pkg/errno"
 	"time"
 
 	"gorm.io/gorm"
 )
+
+// register redis operate strategy
+var rdFavorite redis.Favorite
 
 type Favorites struct {
 	ID        int64          `json:"id"`
@@ -16,30 +19,54 @@ type Favorites struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"delete_at"`
 }
 
+// TableName set table name to make gorm can correctly identify
 func (Favorites) TableName() string {
 	return constants.FavoritesTableName
 }
 
+// AddNewFavorite add favorite relation
 func AddNewFavorite(favorite *Favorites) (bool, error) {
 	err := DB.Create(favorite).Error
 	if err != nil {
 		return false, err
 	}
+	// add data to redis
+	if rdFavorite.CheckLiked(favorite.VideoId) {
+		rdFavorite.AddLiked(favorite.UserId, favorite.VideoId)
+	}
+	if rdFavorite.CheckLike(favorite.UserId) {
+		rdFavorite.AddLike(favorite.UserId, favorite.VideoId)
+	}
+
 	return true, nil
 }
 
+// DeleteFavorite delete favorite relation
 func DeleteFavorite(favorite *Favorites) (bool, error) {
 	err := DB.Where("video_id = ? AND user_id = ?", favorite.VideoId, favorite.UserId).Delete(favorite).Error
 	if err != nil {
 		return false, err
 	}
+	// del data if hit
+	if rdFavorite.CheckLiked(favorite.VideoId) {
+		rdFavorite.DelLiked(favorite.UserId, favorite.VideoId)
+	}
+	if rdFavorite.CheckLike(favorite.UserId) {
+		rdFavorite.DelLike(favorite.UserId, favorite.VideoId)
+	}
 	return true, nil
 }
 
-func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
+// QueryFavoriteExist query the like record by video_id and user_id
+func QueryFavoriteExist(user_id, video_id int64) (bool, error) {
+	if rdFavorite.CheckLiked(video_id) {
+		return rdFavorite.ExistLiked(user_id, video_id), nil
+	}
+	if rdFavorite.CheckLike(user_id) {
+		return rdFavorite.ExistLike(user_id, video_id), nil
+	}
 	var sum int64
 	err := DB.Model(&Favorites{}).Where("video_id = ? AND user_id = ?", video_id, user_id).Count(&sum).Error
-
 	if err != nil {
 		return false, err
 	}
@@ -49,6 +76,7 @@ func QueryFavoriteExist(video_id int64, user_id int64) (bool, error) {
 	return true, nil
 }
 
+// QueryTotalFavoritedByAuthorID query the like num of all the video published by  the user
 func QueryTotalFavoritedByAuthorID(author_id int64) (int64, error) {
 	var sum int64
 	err := DB.Table(constants.FavoritesTableName).Joins("JOIN videos ON likes.video_id = videos.id").
@@ -59,18 +87,8 @@ func QueryTotalFavoritedByAuthorID(author_id int64) (int64, error) {
 	return sum, nil
 }
 
-// 查询视频的点赞数量
-func GetFavoriteCount(video_id int64) (int64, error) {
-	var count int64
-	err := DB.Model(&Favorites{}).Where("video_id = ?", video_id).Count(&count).Error
-	if err != nil {
-		return 0, err
-	}
-	return count, nil
-}
-
-// 获得 user_id 点赞的视频的 video_id
-func GetFavoriteIdList(user_id int64) ([]int64, error) {
+// getFavoriteIdList get the id list of video liked by the user in db
+func getFavoriteIdList(user_id int64) ([]int64, error) {
 	var favorite_actions []Favorites
 	err := DB.Where("user_id = ?", user_id).Find(&favorite_actions).Error
 	if err != nil {
@@ -83,18 +101,37 @@ func GetFavoriteIdList(user_id int64) ([]int64, error) {
 	return result, nil
 }
 
-// 获得 user点赞的视频视频数量
+// GetFavoriteIdList get the id list of video liked by the user
+func GetFavoriteIdList(user_id int64) ([]int64, error) {
+	if rdFavorite.CheckLike(user_id) {
+		return rdFavorite.GetLike(user_id), nil
+	}
+	return getFavoriteIdList(user_id)
+}
+
+// GetFavoriteCountByUserID get the num of the video liked by user
 func GetFavoriteCountByUserID(user_id int64) (int64, error) {
-	var count int64
-	err := DB.Model(&Favorites{}).Where("user_id = ?", user_id).Count(&count).Error
+	if rdFavorite.CheckLike(user_id) {
+		return rdFavorite.CountLike(user_id)
+	}
+	// Not in the cache, go to the database to find and update the cache
+	videos, err := getFavoriteIdList(user_id)
 	if err != nil {
 		return 0, err
 	}
-	return count, nil
+
+	// update redis asynchronously
+	go func(user int64, videos []int64) {
+		for _, video := range videos {
+			rdFavorite.AddLiked(user, video)
+		}
+	}(user_id, videos)
+
+	return int64(len(videos)), nil
 }
 
-// 获得 video_id 所有点赞的人的 id
-func GetFavoriterIdList(video_id int64) ([]int64, error) {
+// getFavoriterIdList get the id list of liker of video in db
+func getFavoriterIdList(video_id int64) ([]int64, error) {
 	var favorite_actions []Favorites
 	err := DB.Where("video_id = ?", video_id).Find(&favorite_actions).Error
 	if err != nil {
@@ -107,15 +144,30 @@ func GetFavoriterIdList(video_id int64) ([]int64, error) {
 	return result, nil
 }
 
-func CheckFavoriteRelationExist(favorite *Favorites) (bool, error) {
-	err := DB.Where("video_id = ? AND user_id = ?", favorite.VideoId, favorite.UserId).Find(&favorite).Error
+// GetFavoriterIdList get the id list of liker of  video
+func GetFavoriterIdList(video_id int64) ([]int64, error) {
+	if rdFavorite.CheckLiked(video_id) {
+		return rdFavorite.GetLiked(video_id), nil
+	}
+	return getFavoriterIdList(video_id)
+}
+
+// GetFavoriteCount count the favorite of video
+func GetFavoriteCount(video_id int64) (int64, error) {
+	if rdFavorite.CheckLiked(video_id) {
+		return rdFavorite.CountLiked(video_id)
+	}
+	// Not in the cache, go to the database to find and update the cache
+	likes, err := getFavoriterIdList(video_id)
 	if err != nil {
-		return false, err
+		return 0, err
 	}
-	// find未找到符合条件的数据会返回空结构体，ID = 0
-	if favorite.ID == 0 {
-		err := errno.FavoriteRelationNotExistErr
-		return false, err
-	}
-	return true, nil
+
+	// update redis asynchronously
+	go func(users []int64, video int64) {
+		for _, user := range users {
+			rdFavorite.AddLiked(user, video)
+		}
+	}(likes, video_id)
+	return int64(len(likes)), nil
 }

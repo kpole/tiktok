@@ -2,21 +2,25 @@ package jwt
 
 import (
 	"context"
+	"offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
+	"time"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/jwt"
+
 	db "offer_tiktok/biz/dal/db"
-	"offer_tiktok/biz/model/basic/user"
-	"offer_tiktok/biz/pack"
-	"offer_tiktok/pkg/errno"
+
 	_ "offer_tiktok/pkg/errno"
-	"offer_tiktok/pkg/utils"
-	"time"
 )
 
-var JwtMiddleware *jwt.HertzJWTMiddleware
-var identity = "user_id"
+var (
+	JwtMiddleware *jwt.HertzJWTMiddleware
+	identity      = "user_id"
+)
 
 func Init() {
 	JwtMiddleware, _ = jwt.New(&jwt.HertzJWTMiddleware{
@@ -24,6 +28,7 @@ func Init() {
 		TokenLookup: "query:token,form:token",
 		Timeout:     24 * time.Hour,
 		IdentityKey: identity,
+		// Verify password at login
 		Authenticator: func(ctx context.Context, c *app.RequestContext) (interface{}, error) {
 			var loginRequest user.DouyinUserLoginRequest
 			if err := c.BindAndValidate(&loginRequest); err != nil {
@@ -40,6 +45,7 @@ func Init() {
 			c.Set("user_id", user.ID)
 			return user.ID, nil
 		},
+		// Set the payload in the token
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(int64); ok {
 				return jwt.MapClaims{
@@ -48,10 +54,12 @@ func Init() {
 			}
 			return jwt.MapClaims{}
 		},
+		// build login response if verify password successfully
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
 			hlog.CtxInfof(ctx, "Login success ，token is issued clientIP: "+c.ClientIP())
 			c.Set("token", token)
 		},
+		// Verify token and get the id of logged-in user
 		Authorizator: func(data interface{}, ctx context.Context, c *app.RequestContext) bool {
 			if v, ok := data.(float64); ok {
 				current_user_id := int64(v)
@@ -61,6 +69,7 @@ func Init() {
 			}
 			return false
 		},
+		// Validation failed, build the message
 		Unauthorized: func(ctx context.Context, c *app.RequestContext, code int, message string) {
 			c.JSON(consts.StatusOK, user.DouyinUserLoginResponse{
 				StatusCode: errno.AuthorizationFailedErrCode,
@@ -68,9 +77,8 @@ func Init() {
 			})
 		},
 		HTTPStatusMessageFunc: func(e error, ctx context.Context, c *app.RequestContext) string {
-			resp := pack.BuildBaseResp(e)
+			resp := utils.BuildBaseResp(e)
 			return resp.StatusMsg
 		},
 	})
-
 }

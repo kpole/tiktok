@@ -4,28 +4,26 @@ package relation
 
 import (
 	"context"
-
-	relation "offer_tiktok/biz/model/social/relation"
-	"offer_tiktok/biz/pack"
 	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
 
-	follow_service "offer_tiktok/biz/service/relation/follow"
-	followerList_service "offer_tiktok/biz/service/relation/follower"
-	friendList_service "offer_tiktok/biz/service/relation/friend"
+	service "offer_tiktok/biz/service/relation"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+
+	relation "offer_tiktok/biz/model/social/relation"
 )
 
-// RelationAction .
+// RelationAction users follow or unfollow other users.
+//
 // @router /douyin/relation/action/ [POST]
 func RelationAction(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.DouyinRelationActionRequest
 	err = c.BindAndValidate(&req)
-	//hlog.CtxInfof(ctx, "RelationAction: usr_token: %s follower_id: %d action_type: %d", req.Token, req.ToUserId, req.ActionType)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, relation.DouyinRelationActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -33,9 +31,9 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	_, err = follow_service.NewRelationService(ctx, c).FollowAction(&req)
+	_, err = service.NewRelationService(ctx, c).FollowAction(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, relation.DouyinRelationActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -49,16 +47,16 @@ func RelationAction(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// RelationFollowList .
+// RelationFollowList get list of all users followed by the logged_in user.
+//
 // @router /douyin/relation/follow/list/ [GET]
 func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.DouyinRelationFollowListRequest
 	err = c.BindAndValidate(&req)
 
-	//hlog.CtxInfof(ctx, "RelationGetFollowList: usr_id: %d user_token: %s", req.UserId, req.Token)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -67,9 +65,9 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	FollowInfo, err := follow_service.NewRelationService(ctx, c).GetFollowList(&req)
+	FollowInfo, err := service.NewRelationService(ctx, c).GetFollowList(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -85,14 +83,15 @@ func RelationFollowList(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// RelationFollowerList .
+// RelationFollowerList get the list of all followers following the logged-in user.
+//
 // @router /douyin/relation/follower/list/ [GET]
 func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.DouyinRelationFollowerListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		// c.String(consts.StatusBadRequest, err.Error())
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowerListResponse{
 			StatusCode: resp.StatusCode,
@@ -102,9 +101,9 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	followerList, err := followerList_service.NewFollowerListService(ctx, c).GetFollowerList(&req)
+	followerList, err := service.NewRelationService(ctx, c).GetFollowerList(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, relation.DouyinRelationFollowerListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -119,14 +118,15 @@ func RelationFollowerList(ctx context.Context, c *app.RequestContext) {
 	}
 }
 
-// RelationFriendList .
+// RelationFriendList get A list of all friends who follow the logged_in user.
+//
 // @router /douyin/relation/friend/list/ [GET]
 func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req relation.DouyinRelationFriendListRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		// c.String(consts.StatusBadRequest, err.Error())
 		c.JSON(consts.StatusOK, relation.DouyinRelationFriendListResponse{
 			StatusCode: resp.StatusCode,
@@ -136,9 +136,9 @@ func RelationFriendList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	friendList, err := friendList_service.NewFriendListService(ctx, c).GetFriendList(&req)
+	friendList, err := service.NewRelationService(ctx, c).GetFriendList(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, relation.DouyinRelationFriendListResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,

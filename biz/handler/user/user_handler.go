@@ -4,24 +4,27 @@ package user
 
 import (
 	"context"
-	user "offer_tiktok/biz/model/basic/user"
 	"offer_tiktok/biz/mw/jwt"
-	"offer_tiktok/biz/pack"
-	service "offer_tiktok/biz/service/user"
 	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+
+	user "offer_tiktok/biz/model/basic/user"
+
+	service "offer_tiktok/biz/service/user"
 )
 
-// UserRegister .
+// UserRegister user registration api
+//
 // @router /douyin/user/register/  [POST]
 func UserRegister(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.DouyinUserRegisterRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -31,7 +34,7 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 
 	_, err = service.NewUserService(ctx, c).UserRegister(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, user.DouyinUserRegisterResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -50,7 +53,8 @@ func UserRegister(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// UserLogin .
+// UserLogin user login api
+//
 // @router /douyin/user/login/  [POST]
 func UserLogin(ctx context.Context, c *app.RequestContext) {
 	v, _ := c.Get("user_id")
@@ -64,14 +68,15 @@ func UserLogin(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// User .
+// User get user info
+//
 // @router /douyin/user/ [GET]
 func User(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req user.DouyinUserRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, user.DouyinUserResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -81,7 +86,7 @@ func User(ctx context.Context, c *app.RequestContext) {
 
 	u, err := service.NewUserService(ctx, c).UserInfo(&req)
 
-	resp := pack.BuildBaseResp(err)
+	resp := utils.BuildBaseResp(err)
 	c.JSON(consts.StatusOK, user.DouyinUserResponse{
 		StatusCode: resp.StatusCode,
 		StatusMsg:  resp.StatusMsg,

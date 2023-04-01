@@ -13,7 +13,7 @@ func TestGetFriendList(t *testing.T) {
 		return
 	}
 	for _, followerId := range followerList {
-		isFriend, err := QueryFollowExist(&Follows{UserId: 1001, FollowerId: followerId})
+		isFriend, err := QueryFollowExist(1001, followerId)
 		if err != nil {
 			fmt.Println("false")
 			return

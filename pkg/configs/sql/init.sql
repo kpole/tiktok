@@ -1,19 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : devcloud_mysql
- Source Server Type    : MySQL
- Source Server Version : 80022
- Source Host           : 9.135.222.35:3306
- Source Schema         : douyin
-
- Target Server Type    : MySQL
- Target Server Version : 80022
- File Encoding         : 65001
-
- Date: 07/02/2023 21:25:49
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -39,7 +23,7 @@ DROP TABLE IF EXISTS `follows`;
 CREATE TABLE `follows` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_id` bigint NOT NULL COMMENT '用户id',
-  `follower_id` bigint NOT NULL COMMENT '关注的用户',
+  `follower_id` bigint NOT NULL COMMENT '粉丝id',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '关注关系创建时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '关注关系删除时间',
   PRIMARY KEY (`id`),
