@@ -1,3 +1,19 @@
+/*
+ * Copyright 2023 CloudWeGo Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package db
 
 import (
@@ -18,6 +34,7 @@ func (Messages) TableName() string {
 	return constants.MessageTableName
 }
 
+// AddNewMessage add a message and check if the id exists
 func AddNewMessage(message *Messages) (bool, error) {
 	exist, err := QueryUserById(message.FromUserId)
 	if exist == nil || err != nil {
@@ -34,7 +51,8 @@ func AddNewMessage(message *Messages) (bool, error) {
 	return true, nil
 }
 
-func GetMessageByIdPair(user_id1 int64, user_id2 int64, pre_msg_time time.Time) ([]Messages, error) {
+// GetMessageByIdPair get the chat history after a certain time
+func GetMessageByIdPair(user_id1, user_id2 int64, pre_msg_time time.Time) ([]Messages, error) {
 	exist, err := QueryUserById(user_id1)
 	if exist == nil || err != nil {
 		return nil, errno.UserIsNotExistErr
@@ -53,7 +71,8 @@ func GetMessageByIdPair(user_id1 int64, user_id2 int64, pre_msg_time time.Time) 
 	return messages, nil
 }
 
-func GetLatestMessageByIdPair(user_id1 int64, user_id2 int64) (*Messages, error) {
+// GetLatestMessageByIdPair query the last message user1 and user2 in the database
+func GetLatestMessageByIdPair(user_id1, user_id2 int64) (*Messages, error) {
 	exist, err := QueryUserById(user_id1)
 	if exist == nil || err != nil {
 		return nil, errno.UserIsNotExistErr

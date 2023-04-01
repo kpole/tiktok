@@ -4,17 +4,18 @@ package favorite
 
 import (
 	"context"
-
-	favorite "offer_tiktok/biz/model/interact/favorite"
-	"offer_tiktok/biz/pack"
-	favorite_service "offer_tiktok/biz/service/favorite"
 	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+
+	favorite "offer_tiktok/biz/model/interact/favorite"
+	favorite_service "offer_tiktok/biz/service/favorite"
 )
 
-// FavoriteAction .
+// FavoriteAction like and unlike operations of the logged-in user on the video.
+//
 // @router /douyin/favortie/action/ [POST]
 func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -22,7 +23,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	err = c.BindAndValidate(&req)
 
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, favorite.DouyinFavoriteActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -32,7 +33,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 
 	ok, err := favorite_service.NewFavoriteService(ctx, c).FavoriteAction(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		c.JSON(consts.StatusOK, favorite.DouyinFavoriteActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -41,7 +42,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	}
 
 	if !ok {
-		resp := pack.BuildBaseResp(errno.FavoriteActionErr)
+		resp := utils.BuildBaseResp(errno.FavoriteActionErr)
 		c.JSON(consts.StatusOK, favorite.DouyinFavoriteActionResponse{
 			StatusCode: resp.StatusCode,
 			StatusMsg:  resp.StatusMsg,
@@ -55,7 +56,8 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	})
 }
 
-// FavoriteList .
+// FavoriteList get all liked videos of the logged-in user.
+//
 // @router /douyin/favorite/list/ [GET]
 func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	var err error
@@ -66,7 +68,6 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	favoritelist, err := favorite_service.NewFavoriteService(ctx, c).GetFavoriteList(&req)
-
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return

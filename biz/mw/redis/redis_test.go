@@ -13,7 +13,7 @@ func TestQueryCount(t *testing.T) {
 		// 更新过期时间。
 		RdbFollowing.Expire(strconv.Itoa(int(user_id)), ExpireTime)
 		fmt.Println(cnt, err)
-	}	
+	}
 }
 
 func TestAddFollow(t *testing.T) {

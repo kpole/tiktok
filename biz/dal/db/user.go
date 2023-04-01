@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Author: kpole
- * @Date: 2023-02-20 21:03:18
- * @LastEditors: kpole
- */
 package db
 
 import (
@@ -33,7 +27,7 @@ func CreateUser(user *User) (int64, error) {
 	return user.ID, err
 }
 
-// 根据 user_name 查询 User
+// QueryUser query User by user_name
 func QueryUser(userName string) (*User, error) {
 	var user User
 	if err := DB.Where("user_name = ?", userName).Find(&user).Error; err != nil {
@@ -42,6 +36,7 @@ func QueryUser(userName string) (*User, error) {
 	return &user, nil
 }
 
+// QueryUserById get user in the database by user id
 func QueryUserById(user_id int64) (*User, error) {
 	var user User
 	if err := DB.Where("id = ?", user_id).Find(&user).Error; err != nil {
@@ -54,7 +49,8 @@ func QueryUserById(user_id int64) (*User, error) {
 	return &user, nil
 }
 
-func VerifyUser(userName string, password string) (int64, error) {
+// VerifyUser verify username and password in the db
+func VerifyUser(userName, password string) (int64, error) {
 	var user User
 	if err := DB.Where("user_name = ? AND password = ?", userName, password).Find(&user).Error; err != nil {
 		return 0, err
@@ -66,6 +62,7 @@ func VerifyUser(userName string, password string) (int64, error) {
 	return user.ID, nil
 }
 
+// CheckUserExistById find if user exists
 func CheckUserExistById(user_id int64) (bool, error) {
 	var user User
 	if err := DB.Where("id = ?", user_id).Find(&user).Error; err != nil {

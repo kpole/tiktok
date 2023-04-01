@@ -34,7 +34,6 @@ func TestQueryUser2(t *testing.T) {
 	Init()
 	user, err := QueryUser("ttttttt")
 	if err != nil {
-
 	}
 	if *user == (User{}) {
 		fmt.Println(true)

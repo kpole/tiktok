@@ -20,7 +20,7 @@ type RelationService struct {
 	c   *app.RequestContext
 }
 
-//  new RelationService
+// new RelationService
 func NewRelationService(ctx context.Context, c *app.RequestContext) *RelationService {
 	return &RelationService{ctx: ctx, c: c}
 }
@@ -57,7 +57,7 @@ func (r *RelationService) FollowAction(req *relation.DouyinRelationActionRequest
 			return false, errno.FollowRelationAlreadyExistErr
 		}
 		flag, err = db.AddNewFollow(new_follow_relation)
-		//增加redis缓存功能
+		// 增加redis缓存功能
 	} else {
 		if !follow_exist {
 			return false, errno.FollowRelationNotExistErr

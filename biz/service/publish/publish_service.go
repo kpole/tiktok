@@ -2,20 +2,22 @@ package service
 
 import (
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"offer_tiktok/biz/dal/db"
 	"offer_tiktok/biz/model/basic/feed"
 	"offer_tiktok/biz/model/basic/publish"
-	feed_service "offer_tiktok/biz/service/feed"
-	"strconv"
-
+	"offer_tiktok/biz/model/common"
 	"offer_tiktok/biz/mw/ffmpeg"
 	"offer_tiktok/biz/mw/minio"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/utils"
 	"path"
+	"strconv"
 	"time"
+
+	feed_service "offer_tiktok/biz/service/feed"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
 type PublishService struct {
@@ -23,11 +25,12 @@ type PublishService struct {
 	c   *app.RequestContext
 }
 
-// NewPublishService NewCreatePublishService new CreatePublishService
+// NewPublishService create publish service
 func NewPublishService(ctx context.Context, c *app.RequestContext) *PublishService {
 	return &PublishService{ctx: ctx, c: c}
 }
 
+// PublishAction put file to MinIO by the FileHeader in the req and store the bucket name and file name
 func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) (err error) {
 	v, _ := s.c.Get("current_user_id")
 	title := s.c.PostForm("title")
@@ -54,6 +57,7 @@ func (s *PublishService) PublishAction(req *publish.DouyinPublishActionRequest) 
 	return err
 }
 
+// PublishList get the video list of user
 func (s *PublishService) PublishList(req *publish.DouyinPublishListRequest) (resp *publish.DouyinPublishListResponse, err error) {
 	resp = &publish.DouyinPublishListResponse{}
 	query_user_id := req.UserId
@@ -73,9 +77,9 @@ func (s *PublishService) PublishList(req *publish.DouyinPublishListRequest) (res
 		return resp, err
 	}
 	for _, item := range videos {
-		video := publish.Video{
+		video := common.Video{
 			Id: item.Id,
-			Author: publish.User{
+			Author: &common.User{
 				Id:              item.Author.Id,
 				Name:            item.Author.Name,
 				FollowCount:     item.Author.FollowCount,

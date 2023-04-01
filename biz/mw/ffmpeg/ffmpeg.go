@@ -2,9 +2,11 @@ package ffmpeg
 
 import (
 	"bytes"
+
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
+// GetSnapshot get the first frame of a video via ffmpeg
 func GetSnapshot(videoPath string) (buf *bytes.Buffer, err error) {
 	buf = bytes.NewBuffer(nil)
 	err = ffmpeg.Input(videoPath).

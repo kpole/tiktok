@@ -16,7 +16,6 @@ func TestAddNewMessage(t *testing.T) {
 		// CreatedAt:  time.Now().Add(one_min_before),
 	}
 	is_succ, err := AddNewMessage(message)
-
 	if err != nil {
 		fmt.Println("err 2")
 	}

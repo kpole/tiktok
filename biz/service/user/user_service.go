@@ -3,12 +3,14 @@ package service
 import (
 	"context"
 	"offer_tiktok/biz/dal/db"
-	user "offer_tiktok/biz/model/basic/user"
+	"offer_tiktok/biz/model/common"
 	"offer_tiktok/pkg/constants"
 	"offer_tiktok/pkg/errno"
 	"offer_tiktok/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
+
+	user "offer_tiktok/biz/model/basic/user"
 )
 
 type UserService struct {
@@ -16,12 +18,12 @@ type UserService struct {
 	c   *app.RequestContext
 }
 
-// NewCreateUserService new CreateUserService
+// NewUserService create user service
 func NewUserService(ctx context.Context, c *app.RequestContext) *UserService {
 	return &UserService{ctx: ctx, c: c}
 }
 
-// CreateUser create user info.
+// UserRegister register user return user id.
 func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id int64, err error) {
 	user, err := db.QueryUser(req.Username)
 	if err != nil {
@@ -42,8 +44,8 @@ func (s *UserService) UserRegister(req *user.DouyinUserRegisterRequest) (user_id
 	return user_id, nil
 }
 
-func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*user.User, error) {
-	// resp := &user.User{}
+// UserInfo the function of user api
+func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*common.User, error) {
 	query_user_id := req.UserId
 	current_user_id, exists := s.c.Get("current_user_id")
 	if !exists {
@@ -52,14 +54,16 @@ func (s *UserService) UserInfo(req *user.DouyinUserRequest) (*user.User, error) 
 	return s.GetUserInfo(query_user_id, current_user_id.(int64))
 }
 
-/**
- * @description: 根据当前用户 user_id 查询 query_user_id 的信息
- * @param {int64} query_user_id
- * @param {int64} userId 当前登陆用户 id，可能为 0
- * @return {user.User}
- */
-func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.User, error) {
-	u := &user.User{}
+// GetUserInfo
+//
+//	@Description: 根据当前用户 user_id 查询 query_user_id 的信息
+//	@receiver *UserService
+//	@param query_user_id int64
+//	@param user_id int64 当前登陆用户 id，可能为 0
+//	@return *user.User
+//	@return error
+func (s *UserService) GetUserInfo(query_user_id, user_id int64) (*common.User, error) {
+	u := &common.User{}
 
 	dbUser, err := db.QueryUserById(query_user_id)
 	if err != nil {
@@ -73,11 +77,11 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 	if err != nil {
 		return u, err
 	}
-	FolloweeCount, err := db.GetFolloweeCount(query_user_id)
+	FollowerCount, err := db.GetFollowerCount(query_user_id)
 
 	var IsFollow bool
 	if user_id != 0 {
-		IsFollow, err = db.QueryFollowExist(&db.Follows{UserId: user_id, FollowerId: query_user_id})
+		IsFollow, err = db.QueryFollowExist(user_id, query_user_id)
 		if err != nil {
 			return u, err
 		}
@@ -93,11 +97,11 @@ func (s *UserService) GetUserInfo(query_user_id int64, user_id int64) (*user.Use
 		return u, err
 	}
 
-	u = &user.User{
+	u = &common.User{
 		Id:              query_user_id,
 		Name:            dbUser.UserName,
 		FollowCount:     FollowCount,
-		FollowerCount:   FolloweeCount,
+		FollowerCount:   FollowerCount,
 		IsFollow:        IsFollow,
 		Avatar:          utils.URLconvert(s.ctx, s.c, dbUser.Avatar),
 		BackgroundImage: utils.URLconvert(s.ctx, s.c, dbUser.BackgroundImage),

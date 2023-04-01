@@ -4,24 +4,25 @@ package feed
 
 import (
 	"context"
-
-	feed "offer_tiktok/biz/model/basic/feed"
-	"offer_tiktok/biz/pack"
-	feed_service "offer_tiktok/biz/service/feed"
 	"offer_tiktok/pkg/errno"
+	"offer_tiktok/pkg/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+
+	feed "offer_tiktok/biz/model/basic/feed"
+	feed_service "offer_tiktok/biz/service/feed"
 )
 
-// Feed .
+// Feed get a list of recommended videos
+//
 // @router /douyin/feed/ [GET]
 func Feed(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req feed.DouyinFeedRequest
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		resp := pack.BuildBaseResp(err)
+		resp := utils.BuildBaseResp(err)
 		// c.String(consts.StatusBadRequest, err.Error())
 		c.JSON(consts.StatusOK, feed.DouyinFeedResponse{
 			StatusCode: resp.StatusCode,
@@ -32,7 +33,7 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := feed_service.NewFeedService(ctx, c).Feed(&req)
 	if err != nil {
-		bresp := pack.BuildBaseResp(err)
+		bresp := utils.BuildBaseResp(err)
 		resp.StatusCode = bresp.StatusCode
 		resp.StatusMsg = bresp.StatusMsg
 		c.JSON(consts.StatusOK, resp)
